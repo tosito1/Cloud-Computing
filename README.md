@@ -1,65 +1,81 @@
 # Cloud-Computing
 
-# Aplicación de Gestión de Socios
+# Repositorio del Proyecto: Gestión de Socios de Casetas de Feria
 
-## Descripción del Proyecto
-Esta aplicación está diseñada para gestionar una comunidad de socios con distintos roles: **socios**, **tesoreros**, **presidentes** y **administradores**. La aplicación permite controlar las cuotas y multas, enviar notificaciones, preparar eventos y gestionar votaciones.
+## Descripción General
 
-### Problema que Resuelve
-La aplicación busca resolver la complejidad de gestionar una comunidad de socios, facilitando la comunicación y la administración a través de una plataforma centralizada en la nube. Se enfoca en la automatización de tareas administrativas y en la mejora de la interacción entre los distintos roles.
+Este repositorio contiene el código, documentación y recursos necesarios para el desarrollo de una **Aplicación de Gestión de Socios de Casetas de Feria**. El proyecto está diseñado para facilitar la administración de socios que participan en la organización y gestión de casetas de feria, ofreciendo funcionalidades que permiten controlar cuotas, multas, notificaciones, preparación de eventos y votaciones.
 
-### Principales Funcionalidades
-- **Control de cuotas y multas:** Los tesoreros y administradores pueden gestionar las cuotas de los socios y aplicar multas en caso de impagos.
-- **Notificaciones:** Los presidentes pueden enviar notificaciones a todos los socios para informarles de eventos importantes o actualizaciones.
-- **Preparación de eventos:** Los presidentes pueden organizar y gestionar eventos comunitarios desde la aplicación.
-- **Votaciones:** Los presidentes pueden crear votaciones para la comunidad. Los socios pueden participar y visualizar los resultados, pero solo los presidentes tienen la capacidad de gestionar las votaciones.
+### Objetivo del Proyecto
 
-## Roles de Usuarios
-1. **Socios:**
-   - Visualizan las cuotas, multas y votaciones.
-   - Reciben notificaciones de los presidentes.
-   - Participan en votaciones.
+El objetivo de este proyecto es crear una aplicación eficiente y escalable que simplifique la gestión de los distintos roles y actividades dentro de una caseta de feria. Esta aplicación se desplegará en la nube, aprovechando sus capacidades para garantizar una accesibilidad y escalabilidad óptimas para todos los usuarios.
 
-2. **Tesoreros:**
-   - Gestionan las cuotas y multas.
-   - Acceden a reportes financieros.
-
-3. **Presidentes:**
-   - Crean y gestionan eventos.
-   - Envían notificaciones a los socios.
-   - Organizan y supervisan las votaciones.
-
-4. **Administradores:**
-   - Tienen acceso completo a todas las funcionalidades.
-   - Controlan el acceso de los diferentes roles y gestionan las configuraciones del sistema.
-
-## Justificación del Uso de Cloud Computing
-El despliegue en la nube permite que la aplicación sea accesible desde cualquier lugar, facilitando la gestión remota y la colaboración en tiempo real. La nube proporciona:
-- **Escalabilidad** para manejar un número creciente de usuarios.
-- **Disponibilidad** y **accesibilidad** global para los miembros de la comunidad.
-- **Seguridad y redundancia** de los datos para proteger la información sensible de los usuarios.
-
-## Historias de Usuario
-### Historia 1: Gestión de Cuotas
-**Como tesorero, quiero poder gestionar las cuotas de los socios para tener un control claro de las finanzas.**
-
-### Historia 2: Notificaciones de Eventos
-**Como presidente, quiero enviar notificaciones a todos los socios para informarles sobre eventos importantes.**
-
-### Historia 3: Votaciones Comunitarias
-**Como presidente, quiero organizar votaciones para que los socios puedan expresar sus opiniones en las decisiones importantes.**
-
-### Historia 4: Visualización de Multas
-**Como socio, quiero poder ver mis multas y el estado de mis pagos para estar al día con mis responsabilidades financieras.**
+---
 
 ## Estructura del Repositorio
-El repositorio contiene los siguientes archivos y directorios:
-- **README.md**: Este archivo, que proporciona una visión general del proyecto.
-- **LICENSE**: Licencia del proyecto.
-- **.gitignore**: Archivo para excluir archivos innecesarios del control de versiones.
-- **docs/**: Carpeta que contiene documentación adicional del proyecto.
 
-## Instalación y Configuración
-1. **Clonar el repositorio:**
-   ```bash
-   git clone https://github.com/tosito1/Cloud-Computing
+El repositorio se organiza en diferentes directorios para mantener el desarrollo bien estructurado y fácil de seguir. La organización es la siguiente:
+
+- **README.md:** Archivo principal que proporciona una visión general del proyecto y la estructura del repositorio.
+- **LICENSE:** Licencia del proyecto, que define los términos bajo los cuales se puede usar y distribuir el software.
+- **.gitignore:** Configuración para excluir archivos innecesarios del control de versiones.
+- **docs/**: Carpeta que contiene documentación adicional, guías de instalación, configuraciones del proyecto y las subcarpetas para cada hito del proyecto..
+
+---
+
+## Hitos del Proyecto
+
+El proyecto se desarrolla siguiendo una serie de hitos que dividen el trabajo en etapas claras y manejables. Cada hito representa un conjunto de tareas específicas para avanzar en la construcción y despliegue de la aplicación. A continuación, se detalla el enfoque de cada hito:
+
+1. **Hito 1: Repositorio de Prácticas y Definición del Proyecto**
+En el siguiente enlace se podrá acceder al [Hito 1](docs/Hitos/Hito1/Hito1.md) donde se explica
+   - Configuración inicial del repositorio y definición del problema que aborda la aplicación.
+   - Documentación de las herramientas y procesos utilizados en el desarrollo.
+   - Configuración de las buenas prácticas con Git y GitHub.
+
+2. **Hito 2: Integración continua**
+   
+3. **Hito 3: Diseño de microservicios**
+   
+4. **Hito 4: Composición de servicios**
+
+5. **Hito 5: Despliegue de la aplicación en un PaaS**
+
+---
+
+## Funcionalidades Principales del Proyecto
+
+- **Gestión de Socios:**
+  - Registro y administración de los socios de la caseta.
+  - Asignación de roles específicos (socio, tesorero, presidente, administrador).
+
+- **Control de Cuotas y Multas:**
+  - Gestión automatizada de cuotas periódicas y aplicación de multas por impagos.
+  - Generación de reportes financieros para los tesoreros.
+
+- **Notificaciones y Comunicación:**
+  - Envío de notificaciones a todos los socios para mantenerlos informados sobre eventos y actualizaciones importantes.
+
+- **Organización de Eventos:**
+  - Creación y gestión de eventos relacionados con la caseta de feria.
+  - Supervisión de la participación de los socios en las actividades de la caseta.
+
+- **Votaciones:**
+  - Creación de votaciones para la toma de decisiones importantes en la organización de la caseta.
+  - Participación de los socios en las votaciones y visualización de resultados en tiempo real.
+
+---
+
+## Licencia
+
+Este proyecto está bajo la licencia [MIT](./LICENSE), lo que significa que puedes usar, modificar y distribuir el código con las condiciones establecidas en el archivo de licencia.
+
+---
+
+## Contacto
+
+Para cualquier pregunta o sugerencia relacionada con el proyecto, por favor contacta a: `antoniojse2001@gmail.com`.
+
+---
+
+¡Gracias por tu interés en el proyecto de **Gestión de Socios de Casetas de Feria**! Este repositorio servirá como el punto central para el desarrollo y despliegue del sistema, asegurando que cada etapa esté claramente documentada y organizada.
