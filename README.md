@@ -27,8 +27,7 @@ El repositorio se organiza en diferentes directorios para mantener el desarrollo
 
 El proyecto se desarrolla siguiendo una serie de hitos que dividen el trabajo en etapas claras y manejables. Cada hito representa un conjunto de tareas específicas para avanzar en la construcción y despliegue de la aplicación. A continuación, se detalla el enfoque de cada hito:
 
-1. **Hito 1: Repositorio de Prácticas y Definición del Proyecto**
-En el siguiente enlace se podrá acceder al [Hito 1](docs/Hitos/Hito1/Hito1.md) donde se explica
+1. **[Hito 1](docs/Hitos/Hito1/Hito1.md) : Repositorio de Prácticas y Definición del Proyecto**
    - Configuración inicial del repositorio y definición del problema que aborda la aplicación.
    - Documentación de las herramientas y procesos utilizados en el desarrollo.
    - Configuración de las buenas prácticas con Git y GitHub.
