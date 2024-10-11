@@ -1,8 +1,18 @@
 ## Configuración del Entorno
 
-### Configuración de la cuenta personal de GitHub
+### Configuración de la Cuenta Personal de GitHub
 
-Actualización de la imagen del perfil de mi cuenta en GiHub.
+- Se actualizó la imagen del perfil y se completó la configuración de los datos personales en GitHub.
+- Captura de pantalla del perfil configurado:
+
+  ![Perfil de GitHub](/docs/img/Perfil.jpg)
+
+### Configuración de Seguridad: Segundo Factor de Autenticación
+
+- Se activó el segundo factor de autenticación para añadir una capa adicional de seguridad a la cuenta de GitHub.
+- Captura de pantalla del segundo factor de autenticación configurado:
+
+  ![Segundo Factor de Autenticación](/docs/img/SegundoFactor.jpg)
 
 ### Configuración de usuario y correo electrónico:
 
