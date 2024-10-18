@@ -2,7 +2,7 @@
 
 # Repositorio del Proyecto: Gestión de Socios de Casetas de Feria
 
-![](https://github.com/tosito1/Cloud-Computing/tree/main/docs/img/logo.png)
+![Logo Paquito Flores](/docs/img/logo.jpg)
 
 ## Descripción General
 
