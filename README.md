@@ -2,6 +2,8 @@
 
 # Repositorio del Proyecto: Gestión de Socios de Casetas de Feria
 
+![](https://github.com/tosito1/Cloud-Computing/tree/main/docs/img/logo.png)
+
 ## Descripción General
 
 Este repositorio contiene el código, documentación y recursos necesarios para el desarrollo de una **Aplicación de Gestión de Socios de Casetas de Feria**. El proyecto está diseñado para facilitar la administración de socios que participan en la organización y gestión de casetas de feria, ofreciendo funcionalidades que permiten controlar cuotas, multas, notificaciones, preparación de eventos y votaciones.
