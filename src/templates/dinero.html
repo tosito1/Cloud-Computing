@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado Financiero - Gestión de Socios de Caseta</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .main-title {
+            display: inline-block;
+            font-size: 2.5rem;
+            text-align: center;
+            color: #ff2e63;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-container {
+            background-color: #1f4068;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px;
+        }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-label, .form-control {
+            text-align: center;
+            display: block;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .form-control {
+            text-align: center;
+            width: 100%;
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .card-financiero {
+            background-color: #1f4068;
+            border: none;
+            color: white;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            margin-right: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .btn-custom {
+            background-color: #e43f5a;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+
+        .btn-custom:hover {
+            background-color: #ff2e63;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .mb-3 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center mb-0 d-flex align-items-center " style="display: flex; margin-bottom: 50px;">
+            <div class="logo-container">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo">
+                </a>
+            </div>
+            <h1 class="text-center">Estado Financiero</h1>
+        </div>
+
+        <!-- Formulario para añadir una nueva cuota (solo para tesorero) -->
+        <div th:if="${current_user.role == 'tesorero'}" class="form-container">
+            <h4>Añadir Nueva Cuota</h4>
+            <form th:action="@{/cuotas}" method="post">
+                <div class="mb-3">
+                    <label for="nombreSocioCuota" class="form-label">Socio</label>
+                    <input type="text" class="form-control" id="nombreSocioCuota" name="nombreSocio" placeholder="Nombre del Socio" required>
+                </div>
+                <div class="mb-3">
+                    <label for="montoCuota" class="form-label">Monto de la Cuota</label>
+                    <input type="number" class="form-control" id="montoCuota" name="monto" placeholder="Monto en €" required>
+                </div>
+                <button type="submit" class="btn btn-custom">Añadir Cuota</button>
+            </form>
+        </div>
+
+        <!-- Formulario para añadir una nueva multa (solo para tesorero) -->
+        <div th:if="${current_user.role == 'tesorero'}" class="form-container">
+            <h4>Añadir Nueva Multa</h4>
+            <form th:action="@{/multas}" method="post">
+                <div class="mb-3">
+                    <label for="nombreSocioMulta" class="form-label">Socio</label>
+                    <input type="text" class="form-control" id="nombreSocioMulta" name="nombreSocio" placeholder="Nombre del Socio" required>
+                </div>
+                <div class="mb-3">
+                    <label for="montoMulta" class="form-label">Monto de la Multa</label>
+                    <input type="number" class="form-control" id="montoMulta" name="monto" placeholder="Monto en €" required>
+                </div>
+                <button type="submit" class="btn btn-custom">Añadir Multa</button>
+            </form>
+        </div>
+
+        <!-- Mostrar las cuotas pagadas y total recaudado -->
+        <div class="card-financiero">
+            <h5>Total Recaudado</h5>
+            <p><strong th:text="'€ ' + ${totalRecaudado}">€ 0.00</strong></p>
+            <h6>Cuotas Pagadas</h6>
+            <ul>
+                <li th:each="cuota : ${cuotas}">
+                    <span th:text="${cuota.socio.nombre}">Nombre del Socio</span>: 
+                    <strong th:text="'€ ' + ${cuota.monto}">€ 0.00</strong>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Mostrar las multas asociadas (solo para tesoreros) -->
+        <div th:if="${current_user.role == 'tesorero'}" class="card-financiero mt-4">
+            <h5>Multas</h5>
+            <ul>
+                <li th:each="multa : ${multas}">
+                    <span th:text="${multa.socio.nombre}">Nombre del Socio</span> -
+                    <span th:text="${multa.cuota}">Cuota</span>:
+                    <strong th:text="'€ ' + ${multa.monto}">€ 0.00</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

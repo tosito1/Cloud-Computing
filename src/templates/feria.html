@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Precios - Gestión de Socios de Caseta</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .logo-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%; /* Hace que el logo sea circular */
+            border: 3px solid #ffffff; /* Añade un borde blanco alrededor del logo */
+            margin-right: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .main-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: #1f4068;
+            border: none;
+            color: white;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-list {
+            display: none; /* Ocultar por defecto */
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .product {
+            padding: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .toggle-button {
+            cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+        }
+
+        .toggle-button h5 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .table {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 15px; /* Aumentar el padding para mayor espacio */
+        }
+
+        .toggle-button {
+            cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+            transition: background-color 0.3s ease; /* Transición suave */
+        }
+
+        .toggle-button:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* Efecto hover */
+        }
+
+        .product-list {
+            display: none; /* Ocultar por defecto */
+            margin-top: 10px;
+        }
+
+        .product {
+            padding: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .product-row:hover {
+            background-color: rgba(255, 255, 255, 0.3); /* Efecto hover para la fila de productos */
+        }
+        .consumed-product-list {
+            display: none; /* Ocultar por defecto */
+            margin-top: 10px;
+        }
+
+        .consumed-product-row {
+            display: none; /* Ocultar por defecto */
+            background-color: rgba(255, 255, 255, 0.2);
+            margin-top: 5px;
+            padding: 15px; /* Espaciado */
+        }
+
+        .consumed-product-card {
+            background-color: rgba(255, 255, 255, 0);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 5px 0; /* Margen superior e inferior */
+            transition: background-color 0.3s ease; /* Transición suave */
+        }
+
+        .consumed-product-card:hover {
+            background-color: rgba(255, 255, 255, 0.4); /* Efecto hover para la tarjeta */
+        }
+
+        .consumed-product-row td {
+            padding: 0; /* Sin padding para las celdas */
+        }
+
+        .consumed-product-name {
+            font-weight: bold; /* Negrita para el nombre del producto */
+        }
+
+        .modal {
+            display: none;
+            position: fixed; /* Posición fija para centrar en la pantalla */
+            z-index: 10; /* Asegúrate de que esté delante de otros elementos */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #1f4068;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            position: absolute; /* Posicionamiento absoluto */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%); /* Centrar el modal */
+            width: 80%; /* Ancho del modal */
+            max-width: 600px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .btn-custom {
+            background-color: #e43f5a;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .btn-custom:hover {
+            background-color: #ff2e63;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Estilo para las etiquetas del formulario */
+/* Estilo para las etiquetas del formulario */
+.modal .form-label {
+    color: #ffffff; /* Color del texto de las etiquetas */
+    font-weight: bold; /* Negrita para destacar las etiquetas */
+    margin-bottom: 8px; /* Espaciado debajo de la etiqueta */
+    font-size: 1.1rem; /* Tamaño de fuente ligeramente mayor */
+}
+
+/* Estilo para los inputs del formulario */
+.modal .form-control {
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo semi-transparente */
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Borde con color blanco semi-transparente */
+    border-radius: 8px; /* Bordes más redondeados */
+    color: #ffffff; /* Color del texto de los inputs */
+    padding: 12px; /* Espaciado interno */
+    font-size: 1rem; /* Tamaño de fuente del input */
+    transition: border-color 0.3s ease, background-color 0.3s ease; /* Transiciones suaves para el borde y el fondo */
+}
+
+/* Cambio de borde y fondo al enfocar el input */
+.modal .form-control:focus {
+    border-color: #ff2e63; /* Color del borde al enfocar */
+    outline: none; /* Quitar el contorno por defecto */
+    background-color: rgba(255, 255, 255, 0.2); /* Cambiar fondo al enfocar */
+}
+
+/* Estilo del botón en el formulario */
+.modal .btn {
+    background-color: #ff2e63; /* Color de fondo del botón */
+    color: #ffffff; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 12px 20px; /* Espaciado interno del botón */
+    font-size: 1rem; /* Tamaño de fuente del botón */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transiciones suaves para el fondo y la transformación */
+    cursor: pointer; /* Cambia el cursor a pointer */
+}
+
+/* Efecto hover para el botón */
+.modal .btn:hover {
+    background-color: #ff5e83; /* Color de fondo al pasar el ratón */
+    transform: scale(1.05); /* Efecto de aumento al pasar el ratón */
+}
+
+/* Estilo del botón de cierre del modal */
+.modal .close {
+    color: #ffffff; /* Color del icono de cierre */
+    font-size: 1.5rem; /* Tamaño del icono de cierre */
+    margin-left: auto; /* Separar el botón de cierre a la derecha */
+}
+
+    </style>
+    <script>
+        function toggleProductList(type) {
+            const productList = document.getElementById(type + "-products");
+            // Alternar la visibilidad de la lista de productos
+            productList.style.display = productList.style.display === "none" ? "table-row" : "none";
+        }
+        function toggleConsumedProductList(socio) {
+            const productList = document.getElementById(socio + "-consumed-products");
+            // Alternar la visibilidad de la lista de productos consumidos
+            productList.style.display = productList.style.display === "none" ? "table-row" : "none";
+        }
+
+         // Función para mostrar el formulario
+        function toggleFormLista() {
+            const formModal = document.getElementById('add-socio-modal');
+            formModal.style.display = formModal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleFormProducts() {
+            const formModal = document.getElementById('add-product-modal');
+            formModal.style.display = formModal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Función para cerrar el formulario
+        function closeFormList() {
+            const formModal = document.getElementById('add-socio-modal');
+            formModal.style.display = 'none';
+        }
+
+        // Función para cerrar el formulario
+        function closeFormProduct() {
+            const formModal = document.getElementById('add-product-modal');
+            formModal.style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header-container">
+            <div class="logo-container">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo"> 
+                </a>
+            </div>
+            <h1>Paquito Flores ✿ </h1>
+        </div>
+        <div class="card">
+            <h1 class="main-title">Lista de Precios de Productos</h1>
+            <!-- Botón para abrir el modal de añadir producto -->
+            <button class="btn btn-custom mb-3" onclick="toggleFormProducts()">Añadir Socio y Productos Consumidos</button>
+
+            <table class="table table-light table-striped">
+                <thead>
+                    <tr>
+                        <th>Tipo de Producto</th>
+                        <th>Precio Medio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="toggle-button" onclick="toggleProductList('refresco')">
+                        <td>Refresco (R)</td>
+                        <td id="refresco-price">€ 1.50</td>
+                    </tr>
+                    <tr class="product-row" id="refresco-products">
+                        <td colspan="2">
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Coca Cola </span>- € 1.50
+                            </div>
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Fanta </span> - € 1.50
+                            </div>
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Sprite </span>- € 1.50
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="toggle-button" onclick="toggleProductList('cubata')">
+                        <td>Cubata (X)</td>
+                        <td id="cubata-price">€ 4.00</td>
+                    </tr>
+                    <tr class="consumed-product-row" id="cubata-products">
+                        <td colspan="2">
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Cuba Libre </span> - € 4.00
+                            </div>
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Mojito </span> - € 4.00
+                            </div>
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Gin Tonic </span> - € 4.00
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Añadir más tipos de productos aquí -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Modal para Añadir Producto -->
+        <div id="add-product-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeFormProduct()">&times;</span>
+                <h2>Añadir Socio y Productos Consumidos</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="tipoProducto" class="form-label">Tipo de Producto</label>
+                        <select class="form-select" id="tipoProducto" required>
+                            <option value="" disabled selected>Seleccionar tipo</option>
+                            <option value="R">Refresco</option>
+                            <option value="X">Cubata</option>
+                            <!-- Añadir más opciones según sea necesario -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombreProducto" class="form-label">Nombre del Producto</label>
+                        <input type="text" class="form-control" id="nombreProducto" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="precioProducto" class="form-label">Precio del Producto</label>
+                        <input type="number" class="form-control" id="precioProducto" required step="0.01">
+                    </div>
+                    <button type="submit" class="btn">Añadir Producto</button>
+                </form>
+            </div>
+        </div>
+        <!-- Lista de productos consumidos por cada socio -->
+        <div class="card">
+            <h1 class="main-title">Productos Consumidos por Cada Socio</h1>
+
+            <button class="btn btn-custom mb-3" onclick="toggleFormList()">Añadir Socio y Productos Consumidos</button>
+
+            <table class="table table-light table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre del Socio</th>
+                        <th>Precio Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="toggle-button" onclick="toggleConsumedProductList('socio1')">
+                        <td>Juan Pérez</td>
+                        <td id="socio1-total">€ 25.00</td>
+                    </tr>
+                    <tr class="product-row" id="socio1-consumed-products">
+                        <td colspan="2">
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Coca Cola</span> - € 1.50
+                            </div>
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Cuba Libre</span> - € 4.00
+                            </div>
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Mojito</span> - € 4.00
+                            </div>
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Fanta</span> - € 1.50
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="toggle-button" onclick="toggleConsumedProductList('socio2')">
+                        <td>Ana Gómez</td>
+                        <td id="socio2-total">€ 18.50</td>
+                    </tr>
+                    <tr class="consumed-product-row" id="socio2-consumed-products">
+                        <td colspan="2">
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Sprite</span> - € 1.50
+                            </div>
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Cuba Libre</span> - € 4.00
+                            </div>
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Coca Cola</span> - € 1.50
+                            </div>
+                            <div class="consumed-product-card">
+                                <span class="consumed-product-name">Gin Tonic</span> - € 4.00
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Añadir más socios aquí -->
+                </tbody>
+            </table>
+        </div>
+        <div id="add-socio-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeFormList()">&times;</span>
+                <h2>Añadir Socio y Productos Consumidos</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="socio-name" class="form-label">Nombre del Socio</label>
+                        <input type="text" class="form-control" id="socio-name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="socio-total" class="form-label">Precio Total</label>
+                        <input type="number" class="form-control" id="socio-total" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="product-name" class="form-label">Producto Consumido</label>
+                        <input type="text" class="form-control" id="product-name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="product-price" class="form-label">Precio del Producto</label>
+                        <input type="number" class="form-control" id="product-price" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Añadir</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeFormList()">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Lista de comidas y apunte de socios e invitados -->
+        <div class="card">
+            <h1 class="main-title">Lista de Precios de Productos</h1>
+            <ul class="list-group">
+                <li style="display: block;" th:each="comida : ${comidas}" class="list-group-item">
+                    <h3 th:text="${comida.nombre}">Nombre de la Comida</h6>
+                    <p><strong>Encargados:</strong> <span th:text="${comida.encargados}">Encargados</span></p>
+                    <p th:text="${comida.descripcion}">Descripción de la comida</p>
+                    <form th:action="@{/apuntarse}" method="post" class="mt-2">
+                        <input type="hidden" th:value="${comida.id}" name="comidaId"/>
+                        <div class="mb-2">
+                            <input type="text" hidden class="form-control" name="socio" required placeholder="Nombre de Usuario" value="${session.username}" readonly>
+                        </div>
+                        <div class="mb-2">
+                            <label for="invitados" class="form-label">Invitados</label>
+                            <input type="number" class="form-control" name="invitados" min="0" placeholder="Número de Invitados">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Apuntarse</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        
+
+        <!-- Tareas a realizar y responsables -->
+        <div class="card">
+            <h1 class="main-title">Tareas a Realizar</h1>
+            <ul class="list-group">
+                <li class="list-group-item" th:each="tarea : ${tareas}">
+                    <span th:text="${tarea.descripcion}">Descripción de la Tarea</span> - 
+                    <strong th:text="${tarea.responsable.nombre}">Responsable</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

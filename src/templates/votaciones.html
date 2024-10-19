@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votaciones - Gestión de Socios de Caseta</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        /* Estilo del Título Principal */
+        .main-title {
+            display: inline-block;
+            font-size: 2.5rem;
+            text-align: center;
+            color: #ff2e63;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Estilo del Formulario */
+        .form-container {
+            background-color: #1f4068;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px;
+        }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-label, .form-control {
+            display: block;
+            text-align: center;
+            color: #ffffff;
+            font-weight: bold;
+            width: 90%;
+        }
+
+        .form-control {
+            padding: 5px 0;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .form-div{
+            margin-bottom: 20px;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-custom {
+            background-color: #e43f5a;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+
+        .btn-custom:hover {
+            background-color: #ff2e63;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-custom:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(255, 46, 99, 0.5);
+        }
+
+        .card-votacion {
+            background: linear-gradient(135deg, #1f4068, #2b5876);
+            border: none;
+            color: white;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s, box-shadow 0.4s;
+            opacity: 0;
+            animation: fadeInUp 1s forwards;
+            text-align: center; /* Centramos el contenido de las tarjetas */
+        }
+
+        .card-votacion:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .card-title {
+            text-align: center;
+            font-size: 20px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .opcion-votacion {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 5px;
+            text-align: center; /* Centramos los elementos de la opción */
+        }
+
+        .opcion-votacion:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-bar {
+            background-color: #e43f5a;
+        }
+
+        .logo-container {
+            display: inline-block;
+        }
+
+        .logo-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%; /* Hace que el logo sea circular */
+            border: 3px solid #ffffff; /* Añade un borde blanco alrededor del logo */
+            margin-right: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Botón para volver al inicio -->
+        <div class="text-center mb-0 d-flex align-items-center " style="display: flex;    margin-bottom: 50px;">
+            <div class="logo-container">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo"> <!-- Reemplaza 'tu_logo.png' con el nombre de tu archivo de logo -->
+                </a>
+            </div>
+            <!-- Título Principal Estilizado -->
+            <h1 class="main-title">Votaciones Actuales</h1>
+        </div>
+        
+
+        <!-- Formulario para añadir una nueva votación (solo para presidentes) -->
+        <div th:if="${current_user.role == 'presidente'}" class="form-container mx-auto" style="max-width: 600px;">
+            <h5 class="card-title">Crear Nueva Votación</h5>
+            <form th:action="@{/votaciones}" method="post">
+                <div class="form-div">
+                    <label for="titulo" class="form-label text-center">Título de la votación</label>
+                    <input type="text" class="form-control text-center" id="titulo" name="titulo" placeholder="Introduce el título" required>
+                </div>
+                <div class="form-div">
+                    <label for="opciones" class="form-label text-center">Opciones (separadas por comas)</label>
+                    <input type="text" class="form-control text-center" id="opciones" name="opciones" placeholder="Opción 1, Opción 2" required>
+                </div>
+                <button type="submit" class="btn btn-custom w-100">Añadir Votación</button>
+            </form>
+        </div>
+
+        
+
+        <!-- Mostrar las votaciones existentes -->
+        <div class="votaciones-container">
+            <h5 class="text-center">Votaciones Actuales</h5>
+            <div class="list-group">
+                {% for votacion in votaciones %}
+                    <div class="list-group-item">
+                        <h6 class="mb-1">{{ votacion.titulo }}</h6>
+                        <small class="text-muted">Fecha: {{ votacion.fecha.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                        
+                        <!-- Opciones de la votación -->
+                        <div class="mt-2">
+                            <strong>Opciones:</strong>
+                            <ul>
+                                {% for opcion in votacion.opciones %}
+                                    <li>{{ opcion.descripcion }} (Votos: {{ opcion.votos }})</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        {% if current_user.role == 'presidente' %}
+                            <!-- Botón para eliminar la votación (solo para presidentes) -->
+                        <div th:if="${current_user.role == 'presidente'}">
+                            <form th:action="@{/votaciones}" method="post" style="display:inline;">
+                                <input type="hidden" name="_method" value="delete"/>
+                                <input type="hidden" name="id" th:value="${votacion.id}"/>
+                                <button type="submit" class="btn btn-danger btn-sm mt-2">Eliminar</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    function agregarOpcion() {
+        const container = document.getElementById('opciones-container');
+        const newOption = document.createElement('div');
+        newOption.classList.add('mb-3');
+        newOption.innerHTML = `
+            <label class="form-label">Opción</label>
+            <input type="text" class="form-control" name="opciones[]" placeholder="Introduce la opción" required>
+        `;
+        container.appendChild(newOption);
+    }
+</script>

@@ -1,6 +1,6 @@
 # Cloud-Computing
 
-# Repositorio del Proyecto:Paquito Flores
+# Repositorio del Proyecto: Paquito Flores
 
 ![Logo Paquito Flores](/docs/img/logo.jpg)
 

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Gestión de Socios de Caseta</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .logo-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%; /* Hace que el logo sea circular */
+            border: 3px solid #ffffff; /* Añade un borde blanco alrededor del logo */
+            margin-right: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .card-container {
+            margin-top: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            padding: 20px;
+            background-color: #1f4068;
+            border: none;
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 15px;
+            width: 250px;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-body i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .btn-custom {
+            background-color: #e43f5a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+
+        .btn-custom:hover {
+            background-color: #ff2e63;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-custom:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(255, 46, 99, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo"> 
+            </div>
+            <h1>Paquito Flores ✿ </h1>
+        </div>
+
+        <div class="card-container">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-bell"></i>
+                    <h5 class="card-title">Notificaciones</h5>
+                    <p class="card-text">Vista previa de las últimas notificaciones.</p>
+                    <a href="{{ url_for('notificaciones') }}" class="btn btn-custom">Ver Notificaciones</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-vote-yea"></i>
+                    <h5 class="card-title">Votaciones</h5>
+                    <p class="card-text">Participa en las votaciones actuales.</p>
+                    <a href="{{ url_for('votaciones') }}" class="btn btn-custom">Ver Votaciones</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <h5 class="card-title">Dinero</h5>
+                    <p class="card-text">Consulta la situación financiera.</p>
+                    <a href="{{ url_for('dinero') }}" class="btn btn-custom">Ver Estado Financiero</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-fire"></i>
+                    <h5 class="card-title">San Juan</h5>
+                    <p class="card-text">Información sobre la fiesta de San Juan.</p>
+                    <a href="{{ url_for('san_juan') }}" class="btn btn-custom">Ver Detalles de San Juan</a>
+                </div>
+            </div>
+
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-music"></i>
+                    <h5 class="card-title">Feria</h5>
+                    <p class="card-text">Detalles sobre la Feria de tu pueblo.</p>
+                    <a href="{{ url_for('feria') }}" class="btn btn-custom">Ver Detalles de Feria</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
