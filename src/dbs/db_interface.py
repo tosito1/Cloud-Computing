@@ -1,9 +1,99 @@
 import sqlite3
 import tkinter as tk
-from tkinter import messagebox, simpledialog, Listbox
+from tkinter import Listbox, messagebox
+from tkinter import simpledialog
+from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+import datetime
 
-# Cambia el nombre de la base de datos si es necesario
-db_path = 'socios.db'
+# nombre de la base de datos
+db_path = 'Paquito flores.db'
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+    
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    role = Column(String, nullable=False)
+
+class Notification(Base):
+    __tablename__ = 'notifications'
+    
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    text = Column(String, nullable=False)
+    date = Column(DateTime, default=datetime.datetime.utcnow)
+
+class Voting(Base):
+    __tablename__ = 'votaciones'
+    
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    description = Column(String, nullable=True)
+    
+class Option(Base):
+    __tablename__ = 'opciones'
+    
+    id = Column(Integer, primary_key=True)
+    voting_id = Column(Integer, ForeignKey('votaciones.id'), nullable=False)
+    option_text = Column(String, nullable=False)
+    votes = Column(Integer, default=0)
+
+class Quota(Base):
+    __tablename__ = 'cuotas'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    amount = Column(Float, nullable=False)
+    date = Column(DateTime, default=datetime.datetime.utcnow)
+    status = Column(String, nullable=False)  # e.g., "pagada", "pendiente"
+
+class Fine(Base):
+    __tablename__ = 'multas'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    amount = Column(Float, nullable=False)
+    date = Column(DateTime, default=datetime.datetime.utcnow)
+
+def create_database(db_name):
+    engine = create_engine(f'sqlite:///{db_name}.db')  # Cambia la ruta según tu preferencia
+    Base.metadata.create_all(engine)  # Crea todas las tablas definidas en Base
+    return engine
+
+def on_create_database():
+    db_name = entry_db_name.get()
+    if db_name.strip() == "":
+        messagebox.showwarning("Advertencia", "Por favor, ingrese un nombre para la base de datos.")
+        return
+
+    try:
+        global db_path
+        db_path = f"{db_name}.db"
+        engine = create_database(db_name)
+        messagebox.showinfo("Éxito", f"Base de datos '{db_name}.db' y tablas creadas.")
+        entry_db_name.delete(0, tk.END)
+    except Exception as e:
+        messagebox.showerror("Error", f"Ocurrió un error al crear la base de datos: {e}")
+
+
+def conectar():
+    """Función para conectar a la base de datos."""
+    try:
+        conn = sqlite3.connect(db_path)
+        return conn
+    except sqlite3.Error as e:
+        print(f"Error al conectar con la base de datos: {e}")
+        return None
+
+def cerrar(conn):
+    """Función para cerrar la conexión a la base de datos."""
+    if conn:
+        conn.close()
 
 def crear_tabla():
     nombre_tabla = simpledialog.askstring("Crear Tabla", "Ingrese el nombre de la tabla:")
@@ -150,15 +240,22 @@ def mostrar_contenido_tabla_seleccionada():
     btn_cerrar.pack(pady=10)
 
 # Crear la ventana principal
+# Crear la ventana principal
 def crear_ventana():
     ventana = tk.Tk()
     ventana.title("Gestor de Base de Datos")
-    ventana.geometry("400x300")
+    ventana.geometry("400x400")
     ventana.configure(bg="#f0f0f0")  # Color de fondo
 
     # Estilo
     label = tk.Label(ventana, text="Menú de Base de Datos", font=("Helvetica", 18), bg="#f0f0f0", fg="#333")
     label.pack(pady=20)
+
+    # Campo de entrada para el nombre de la base de datos
+    global entry_db_name
+    entry_db_name = tk.Entry(ventana, width=30, font=("Helvetica", 12))
+    entry_db_name.pack(pady=10)
+    entry_db_name.insert(0, "Nombre de la base de datos")
 
     # Botones personalizados
     style = {
@@ -170,6 +267,9 @@ def crear_ventana():
         "borderwidth": 2,
         "relief": "flat"
     }
+
+    btn_crear_db = tk.Button(ventana, text="Crear Base de Datos", command=on_create_database, **style)
+    btn_crear_db.pack(pady=10)
 
     btn_crear_tabla = tk.Button(ventana, text="Crear Tabla", command=crear_tabla, **style)
     btn_crear_tabla.pack(pady=10)
@@ -188,5 +288,7 @@ def crear_ventana():
 
     ventana.mainloop()
 
-# Ejecutar la ventana
-crear_ventana()
+if __name__ == '__main__':
+    # Aquí se puede abrir la ventana de gestión de la base de datos
+    crear_ventana()
+    print("Gestión de la base de datos abierta.")
