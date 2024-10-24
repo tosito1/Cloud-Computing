@@ -15,6 +15,21 @@ def insertar_usuario(username, password, role):
             cerrar(conn)
 
 # Leer
+def obtener_usuarios():
+    conn = conectar()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM users')  # Selecciona todos los usuarios
+            usuarios = cursor.fetchall()  # Obtén todos los resultados
+            return usuarios  # Devuelve la lista de usuarios
+        except Exception as e:
+            print(f"Error al obtener usuarios: {e}")
+            return []  # Devuelve una lista vacía en caso de error
+        finally:
+            cerrar(conn)  # Asegúrate de cerrar la conexión
+
+
 def obtener_usuario_por_id(user_id):
     conn = conectar()
     if conn:
