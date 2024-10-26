@@ -16,17 +16,49 @@
             flex-direction: column;
         }
 
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .logo-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%; /* Hace que el logo sea circular */
+            border: 3px solid #ffffff; /* Añade un borde blanco alrededor del logo */
+            margin-right: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
         .container {
             margin-top: 20px;
         }
 
+        /* Estilo del Título Principal */
         .main-title {
+            text-align: center;
+            margin-bottom: 30px;
+            flex-wrap: nowrap;
+            justify-content: center;
+            text-align: center;
             display: inline-block;
             font-size: 2.5rem;
-            text-align: center;
             color: #ff2e63;
             font-weight: bold;
-            margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             animation: fadeIn 1s ease-in-out;
         }
@@ -37,6 +69,7 @@
         }
 
         .form-container {
+            margin-top: 30px;
             background-color: #1f4068;
             border-radius: 15px;
             padding: 20px;
@@ -72,15 +105,15 @@
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
-        .card-financiero {
-            background-color: #1f4068;
+        /* .card-financiero {
+            background-color: #f8f9fa;
             border: none;
             color: white;
             margin: 15px 0;
             padding: 15px;
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
+        } */
 
         .logo-container img {
             width: 80px;
@@ -122,75 +155,146 @@
         .mb-3 {
             margin-bottom: 10px;
         }
+
+        .card {
+            background-color: #1f4068;
+            border: none;
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-financiero {
+            background-color: #f8f9fa;
+            border: none;
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-financiero:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+.table th {
+    background-color: #f8f9fa; /* Cambia el color del encabezado */
+    font-weight: bold;
+}
+
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="text-center mb-0 d-flex align-items-center " style="display: flex; margin-bottom: 50px;">
+        <div class="main-title text-center mb-0 d-flex align-items-center " style="display: flex;    margin-bottom: 50px;">
             <div class="logo-container">
                 <a href="{{ url_for('index.home') }}">
-                    <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo">
+                    <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo"> <!-- Reemplaza 'tu_logo.png' con el nombre de tu archivo de logo -->
                 </a>
             </div>
             <h1 class="text-center">Estado Financiero</h1>
         </div>
 
         <!-- Formulario para añadir una nueva cuota (solo para tesorero) -->
-        <div th:if="${current_user.role == 'tesorero'}" class="form-container">
-            <h4>Añadir Nueva Cuota</h4>
-            <form th:action="@{/cuotas}" method="post">
-                <div class="mb-3">
-                    <label for="nombreSocioCuota" class="form-label">Socio</label>
-                    <input type="text" class="form-control" id="nombreSocioCuota" name="nombreSocio" placeholder="Nombre del Socio" required>
+        {% if session['user_role'] in ['tesorero', 'administrador'] %}
+        <div class="form-container">
+            <h2>Registro de Pagos</h2>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="user_id">Seleccionar Usuario:</label>
+                    <select name="user_id" id="user_id" class="form-control" required>
+                        {% for usuario in usuarios %}
+                            <option value="{{ usuario[1] }}">{{ usuario[1] }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
-                <div class="mb-3">
-                    <label for="montoCuota" class="form-label">Monto de la Cuota</label>
-                    <input type="number" class="form-control" id="montoCuota" name="monto" placeholder="Monto en €" required>
+                <div class="form-group">
+                    <label for="quota_name">Nombre de la Cuota:</label>
+                    <input type="text" name="quota_name" id="quota_name" class="form-control" required>
                 </div>
-                <button type="submit" class="btn btn-custom">Añadir Cuota</button>
+                <div class="form-group">
+                    <label for="amount">Dinero a Pagar:</label>
+                    <input type="number" name="amount" id="amount" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="multa_amount">Dinero de la Multa (opcional):</label>
+                    <input type="number" name="multa_amount" id="multa_amount" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Registrar Pago</button>
             </form>
         </div>
-
-        <!-- Formulario para añadir una nueva multa (solo para tesorero) -->
-        <div th:if="${current_user.role == 'tesorero'}" class="form-container">
-            <h4>Añadir Nueva Multa</h4>
-            <form th:action="@{/multas}" method="post">
-                <div class="mb-3">
-                    <label for="nombreSocioMulta" class="form-label">Socio</label>
-                    <input type="text" class="form-control" id="nombreSocioMulta" name="nombreSocio" placeholder="Nombre del Socio" required>
-                </div>
-                <div class="mb-3">
-                    <label for="montoMulta" class="form-label">Monto de la Multa</label>
-                    <input type="number" class="form-control" id="montoMulta" name="monto" placeholder="Monto en €" required>
-                </div>
-                <button type="submit" class="btn btn-custom">Añadir Multa</button>
-            </form>
-        </div>
+        {% endif %}
 
         <!-- Mostrar las cuotas pagadas y total recaudado -->
-        <div class="card-financiero">
-            <h5>Total Recaudado</h5>
-            <p><strong th:text="'€ ' + ${totalRecaudado}">€ 0.00</strong></p>
-            <h6>Cuotas Pagadas</h6>
-            <ul>
-                <li th:each="cuota : ${cuotas}">
-                    <span th:text="${cuota.socio.nombre}">Nombre del Socio</span>: 
-                    <strong th:text="'€ ' + ${cuota.monto}">€ 0.00</strong>
-                </li>
-            </ul>
+        <div class="card mt-5">
+            <h1 class="text-center mb-4">Registro Financiero</h1>
+        
+            <!-- Mostrar cuotas registradas -->
+            <div class="card card-financiero mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Cuotas Registradas</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Usuario</th>
+                                <th>Cantidad</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cuota in cuotas %}
+                                <tr>
+                                    <td>{{ cuota[2] }}</td>
+                                    <td>{{ cuota[1] }}</td> <!-- Considera mostrar el nombre del usuario -->
+                                    <td>{{ cuota[3] }}</td>
+                                    <td>{{ cuota[4] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        
+            <!-- Mostrar las multas asociadas (solo para tesoreros) -->
+            <div th:if="${current_user.role == 'tesorero'}" class="card card-financiero mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="mb-0">Multas Registradas</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Cantidad</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for multa in multas %}
+                                <tr>
+                                    <td>{{ multa[1] }}</td> <!-- Considera mostrar el nombre del usuario -->
+                                    <td>{{ multa[2] }}</td>
+                                    <td>{{ multa[4] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-
-        <!-- Mostrar las multas asociadas (solo para tesoreros) -->
-        <div th:if="${current_user.role == 'tesorero'}" class="card-financiero mt-4">
-            <h5>Multas</h5>
-            <ul>
-                <li th:each="multa : ${multas}">
-                    <span th:text="${multa.socio.nombre}">Nombre del Socio</span> -
-                    <span th:text="${multa.cuota}">Cuota</span>:
-                    <strong th:text="'€ ' + ${multa.monto}">€ 0.00</strong>
-                </li>
-            </ul>
-        </div>
-    </div>
 </body>
 </html>

@@ -17,18 +17,45 @@
             flex-direction: column;
         }
 
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .logo-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%; /* Hace que el logo sea circular */
+            border: 3px solid #ffffff; /* Añade un borde blanco alrededor del logo */
+            margin-right: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
         .container {
             margin-top: 20px;
         }
 
         /* Estilo del Título Principal */
         .main-title {
-            display: inline-block;
+            flex-wrap: nowrap;
+            justify-content: center;
             font-size: 2.5rem;
-            text-align: center;
             color: #ff2e63;
             font-weight: bold;
-            margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             animation: fadeIn 1s ease-in-out;
         }
@@ -40,6 +67,7 @@
 
         /* Estilo del Formulario */
         .form-container {
+            margin-top: 30px;
             background-color: #1f4068;
             border-radius: 15px;
             padding: 20px;
@@ -62,6 +90,7 @@
         }
 
         .form-control {
+            width: 100%;
             padding: 5px 0;
             background: rgba(255, 255, 255, 0.2);
             border: none;
@@ -119,6 +148,7 @@
         }
 
         .card-title {
+            margin-bottom: 10px;
             text-align: center;
             font-size: 20px;
         }
@@ -178,15 +208,13 @@
 </head>
 <body>
     <div class="container">
-        <!-- Botón para volver al inicio -->
-        <div class="text-center mb-0 d-flex align-items-center " style="display: flex;    margin-bottom: 50px;">
+        <div class="main-title text-center mb-0 d-flex align-items-center " style="display: flex;    margin-bottom: 50px;">
             <div class="logo-container">
                 <a href="{{ url_for('index.home') }}">
                     <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo"> <!-- Reemplaza 'tu_logo.png' con el nombre de tu archivo de logo -->
                 </a>
             </div>
-            <!-- Título Principal Estilizado -->
-            <h1 class="main-title">Votaciones Actuales</h1>
+            <h1 class="main-title">Votaciones</h1>
         </div>
         
 
@@ -195,11 +223,11 @@
             <h5 class="card-title">Crear Nueva Votación</h5>
             <form th:action="@{/votaciones}" method="post">
                 <div class="form-div">
-                    <label for="titulo" class="form-label text-center">Título de la votación</label>
+                    <label for="titulo" class="form-label text-center w-100">Título de la votación</label>
                     <input type="text" class="form-control text-center" id="titulo" name="titulo" placeholder="Introduce el título" required>
                 </div>
                 <div class="form-div">
-                    <label for="opciones" class="form-label text-center">Opciones (separadas por comas)</label>
+                    <label for="opciones" class="form-label text-center w-100">Opciones (separadas por comas)</label>
                     <input type="text" class="form-control text-center" id="opciones" name="opciones" placeholder="Opción 1, Opción 2" required>
                 </div>
                 <button type="submit" class="btn btn-custom w-100">Añadir Votación</button>
@@ -209,41 +237,43 @@
         
 
         <!-- Mostrar las votaciones existentes -->
-        <div class="votaciones-container">
-            <h5 class="text-center">Votaciones Actuales</h5>
-            <div class="list-group">
-                {% for votacion in votaciones %}
-                    <div class="list-group-item">
-                        <h6 class="mb-1">{{ votacion.titulo }}</h6>
-                        <small class="text-muted">Fecha: {{ votacion.fecha.strftime('%Y-%m-%d %H:%M:%S') }}</small>
-                        
-                        <!-- Opciones de la votación -->
-                        <div class="mt-2">
-                            <strong>Opciones:</strong>
-                            <ul>
-                                {% for opcion in votacion.opciones %}
-                                    <li>{{ opcion.descripcion }} (Votos: {{ opcion.votos }})</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+<div class="votaciones-container form-container mx-auto">
+    <h5 class="text-center">Votaciones Actuales</h5>
+    <div class="list-group">
+        {% for votacion_id, votacion_data in votaciones.items() %}
+            <div class="list-group-item">
+                <h6 class="mb-1">{{ votacion_data.title }}</h6>
+                <p>{{ votacion_data.description }}</p>
 
-                        {% if current_user.role == 'presidente' %}
-                            <!-- Botón para eliminar la votación (solo para presidentes) -->
-                        <div th:if="${current_user.role == 'presidente'}">
-                            <form th:action="@{/votaciones}" method="post" style="display:inline;">
-                                <input type="hidden" name="_method" value="delete"/>
-                                <input type="hidden" name="id" th:value="${votacion.id}"/>
-                                <button type="submit" class="btn btn-danger btn-sm mt-2">Eliminar</button>
-                            </form>
-                        </div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
+                <div class="mt-2">
+                    <strong>Opciones:</strong>
+                    <ul>
+                        {% for opcion in votacion_data.options %}
+                            <li>
+                                {{ opcion.option_text }} (Votos: {{ opcion.vote_count }})
+
+                                <!-- Botón para votar por esta opción -->
+                                <form action="{{ url_for('votaciones.votar_opcion', opcion_id=opcion.id) }}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-primary btn-sm">Votar</button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {% if session['user_role'] in ['presidente', 'administrador'] %}
+                    <form action="{{ url_for('votaciones.eliminar_votacion', votacion_id=votacion_id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm mt-2">Eliminar</button>
+                    </form>
+                {% endif %}
             </div>
-        </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
+</div>
+
+        
+
+
 </body>
 </html>
 

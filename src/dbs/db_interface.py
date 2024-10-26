@@ -6,6 +6,8 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import datetime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy.orm import relationship
 
 # nombre de la base de datos
 db_path = 'Paquito flores.db'
@@ -20,13 +22,22 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     role = Column(String, nullable=False)
 
+    # Relación con las notificaciones
+    notifications = relationship("Notification", back_populates="president")
+
 class Notification(Base):
-    __tablename__ = 'notifications'
+    __tablename__ = 'notificationes'
     
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     text = Column(String, nullable=False)
     date = Column(DateTime, default=datetime.datetime.utcnow)
+
+    # Columna para almacenar el ID del presidente (usuario)
+    president_id = Column(Integer, ForeignKey('users.id'), nullable=False)  
+    
+    # Relación con la clase User
+    president = relationship("users", back_populates="notificationes")
 
 class Voting(Base):
     __tablename__ = 'votaciones'
@@ -34,6 +45,9 @@ class Voting(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     description = Column(String, nullable=True)
+
+    # Relación con las tablas User y Option
+    option = relationship("opciones", back_populates="votaciones")
     
 class Option(Base):
     __tablename__ = 'opciones'
@@ -41,16 +55,34 @@ class Option(Base):
     id = Column(Integer, primary_key=True)
     voting_id = Column(Integer, ForeignKey('votaciones.id'), nullable=False)
     option_text = Column(String, nullable=False)
-    votes = Column(Integer, default=0)
+
+    # Relación con la clase Voting
+    voting = relationship("votaciones", back_populates="opciones")
+
+# Tabla de votos
+class Vote(Base):
+    __tablename__ = 'votes'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    option_id = Column(Integer, ForeignKey('opciones.id'), nullable=False)
+
+    # Relaciones
+    user = relationship("users", back_populates="votes")
+    option = relationship("opciones", backref="votes")
 
 class Quota(Base):
     __tablename__ = 'cuotas'
     
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    name = Column(String, nullable=False)  # Nueva columna para el nombre de la cuota
     amount = Column(Float, nullable=False)
     date = Column(DateTime, default=datetime.datetime.utcnow)
-    status = Column(String, nullable=False)  # e.g., "pagada", "pendiente"
+    status = Column(String, nullable=False)
+    
+    fine_id = Column(Integer, ForeignKey('multas.id'))
+
 
 class Fine(Base):
     __tablename__ = 'multas'
@@ -58,6 +90,7 @@ class Fine(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     amount = Column(Float, nullable=False)
+    quota_id = Column(Integer, ForeignKey('cuotas.id'))  # Nueva relación con la cuota
     date = Column(DateTime, default=datetime.datetime.utcnow)
 
 def create_database(db_name):
@@ -244,7 +277,7 @@ def mostrar_contenido_tabla_seleccionada():
 def crear_ventana():
     ventana = tk.Tk()
     ventana.title("Gestor de Base de Datos")
-    ventana.geometry("400x400")
+    ventana.geometry("400x500")
     ventana.configure(bg="#f0f0f0")  # Color de fondo
 
     # Estilo

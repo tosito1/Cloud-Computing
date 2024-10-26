@@ -1,30 +1,57 @@
+import datetime
 from dbs.db_interface import conectar, cerrar
 
 # Crear Cuota
-def insertar_cuota(user_id, monto, fecha):
+def insertar_cuota(user_id, quota_name, amount, fine_amount=None):
     conn = conectar()
     if conn:
         try:
             cursor = conn.cursor()
-            cursor.execute('INSERT INTO cuotas (user_id, monto, fecha) VALUES (?, ?, ?)', (user_id, monto, fecha))
-            conn.commit()
+            # Inserta la cuota
+            cursor.execute('''
+                INSERT INTO cuotas (user_id, name, amount, date, status)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (user_id, quota_name, amount, datetime.datetime.utcnow(), 'pagada'))
+            
+            quota_id = cursor.lastrowid  # Obtener el ID de la cuota recién insertada
+
+            # Si hay un monto de multa, inserta la multa y asóciala a la cuota
+            if fine_amount:
+                cursor.execute('''
+                    INSERT INTO multas (user_id, amount, quota_id, date)
+                    VALUES (?, ?, ?, ?)
+                ''', (user_id, fine_amount, quota_id, datetime.datetime.utcnow()))
+
+            conn.commit()  # Guardar los cambios
+            return True
         except Exception as e:
-            print(f"Error al insertar cuota: {e}")
+            print(f"Error al registrar la cuota: {e}")
+            return False
         finally:
             cerrar(conn)
+    return False
+
+
 
 # Crear Multa
-def insertar_multa(user_id, monto, fecha):
+def insertar_multa(user_id, amount, quota_id):
     conn = conectar()
     if conn:
         try:
             cursor = conn.cursor()
-            cursor.execute('INSERT INTO multas (user_id, monto, fecha) VALUES (?, ?, ?)', (user_id, monto, fecha))
+            cursor.execute('''
+                INSERT INTO multas (user_id, amount, quota_id)
+                VALUES (?, ?, ?)
+            ''', (user_id, amount, quota_id))
             conn.commit()
+            return True
         except Exception as e:
-            print(f"Error al insertar multa: {e}")
+            print(f"Error al registrar la multa: {e}")
+            return False
         finally:
             cerrar(conn)
+    return False
+
 
 # Leer Cuotas
 def obtener_cuotas():

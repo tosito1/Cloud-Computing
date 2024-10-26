@@ -19,13 +19,18 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = obtener_usuario_por_nombre(username)
+        
         if user and verificar_contrasena(password, user[2]):
             session['user_id'] = user[0]
+            session['user_role'] = user[3]
+            session['user_username'] = user[1] 
+            
             flash('Has iniciado sesión con éxito.')
             return redirect(url_for('index.index'))  # Redirigir a la página de inicio
         else:
             flash('Credenciales incorrectas.')
     return render_template('login.html')
+
 
 @auth_bp.route('/logout')
 @login_requerido

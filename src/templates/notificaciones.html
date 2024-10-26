@@ -16,18 +16,49 @@
             flex-direction: column;
         }
 
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .logo-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%; /* Hace que el logo sea circular */
+            border: 3px solid #ffffff; /* Añade un borde blanco alrededor del logo */
+            margin-right: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
         .container {
             margin-top: 20px;
         }
 
         /* Estilo del Título Principal */
         .main-title {
+            text-align: center;
+            margin-bottom: 30px;
+            flex-wrap: nowrap;
+            justify-content: center;
+            text-align: center;
             display: inline-block;
             font-size: 2.5rem;
-            text-align: center;
             color: #ff2e63;
             font-weight: bold;
-            margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             animation: fadeIn 1s ease-in-out;
         }
@@ -144,7 +175,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="text-center mb-0 d-flex align-items-center " style="display: flex;    margin-bottom: 50px;">
+        <div class="main-title text-center mb-0 d-flex align-items-center " style="display: flex;    margin-bottom: 50px;">
             <div class="logo-container">
                 <a href="{{ url_for('index.home') }}">
                     <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo"> <!-- Reemplaza 'tu_logo.png' con el nombre de tu archivo de logo -->
@@ -154,7 +185,8 @@
         </div>
 
         <!-- Formulario para añadir una nueva notificación (solo para presidentes) -->
-        <div th:if="${current_user.role == 'presidente'}" class="mb-4 card-notification">
+        {% if session['user_role'] in ['presidente', 'administrador'] %}
+        <div class="mb-4 card-notification">
             <form th:action="@{/notificaciones}" method="post" class="form-inline">
                 <div class="form-inline">
                     <input type="text" class="form-control" name="titulo" placeholder="Título de la notificación" required>
@@ -165,6 +197,7 @@
                 <button type="submit" class="btn btn-custom">Añadir Notificación</button>
             </form>
         </div>
+        {% endif %}
 
         <!-- Mostrar todas las notificaciones -->
         <div class="mt-4">
@@ -175,9 +208,9 @@
                 <small class="text-muted">Publicado el {{ notificacion[3] }}</small> <!-- Fecha de publicación -->
 
                 <!-- Botón para eliminar la notificación (solo para presidentes) -->
-                {% if current_user.role == 'presidente' %}
+                {% if session['user_role'] in ['presidente', 'administrador'] %}
                 <div class="mt-2">
-                    <form action="{{ url_for('eliminar_notificacion') }}" method="post" style="display:inline;">
+                    <form action="{{ url_for('notificaciones.eliminar_notificacion', notificacion_id=notificacion[0]) }}" method="post" style="display:inline;">
                         <input type="hidden" name="id" value="{{ notificacion[0] }}" />
                         <button type="submit" class="btn btn-custom">Eliminar</button>
                     </form>
