@@ -1,0 +1,55 @@
+# Este flujo de trabajo instalará las dependencias de Python, ejecutará pruebas y revisará el código con linting.
+
+name: Python Application CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Lint with flake8
+      run: |
+        # Detiene la construcción si hay errores de sintaxis o nombres indefinidos
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Los errores se tratan como advertencias
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Test with pytest
+      run: |
+        pytest --maxfail=1 --disable-warnings -q  # Detiene después del primer fallo y suprime advertencias
+
+    - name: Upload test results
+      if: always()  # Sube los resultados incluso si hay fallos
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: test-results.xml  # Asegúrate de que pytest genere un archivo XML de resultados
+
+    - name: Notify on failure
+      if: failure()  # Notifica si hay fallos
+      run: |
+        echo "Build failed. Please check the logs for details."
+
