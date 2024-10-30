@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import Listbox, messagebox
 from tkinter import simpledialog
 from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime

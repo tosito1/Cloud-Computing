@@ -27,21 +27,16 @@ def dinero():
     usuarios = obtener_usuarios()  # Función que recupera todos los usuarios
     return render_template('dinero.html', cuotas=cuotas, multas=multas, usuarios=usuarios)
 
-    # Obtener las cuotas y multas para mostrarlas en el formulario
-    cuotas = obtener_cuotas()
-    multas = obtener_multas()
-    return render_template('dinero.html', cuotas=cuotas, multas=multas)
-
-@dinero_bp.route('/dinero/cuota/<int:cuota_id>/editar', methods=['GET', 'POST'])
-@login_requerido
-def editar_cuota(cuota_id):
-    cuota = obtener_cuota_por_id(cuota_id)
-    if request.method == 'POST':
-        monto = request.form['monto']
-        actualizar_cuota(cuota_id, monto)
-        flash('Cuota actualizada con éxito')
-        return redirect(url_for('dinero.dinero'))
-    return render_template('editar_cuota.html', cuota=cuota)
+# @dinero_bp.route('/dinero/cuota/<int:cuota_id>/editar', methods=['GET', 'POST'])
+# @login_requerido
+# def editar_cuota(cuota_id):
+#     cuota = obtener_cuota_por_id(cuota_id)
+#     if request.method == 'POST':
+#         monto = request.form['monto']
+#         actualizar_cuota(cuota_id, monto)
+#         flash('Cuota actualizada con éxito')
+#         return redirect(url_for('dinero.dinero'))
+#     return render_template('editar_cuota.html', cuota=cuota)
 
 @dinero_bp.route('/dinero/multa', methods=['POST'])
 @login_requerido

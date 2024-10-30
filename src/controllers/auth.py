@@ -25,10 +25,10 @@ def login():
             session['user_role'] = user[3]
             session['user_username'] = user[1] 
             
-            flash('Has iniciado sesión con éxito.')
+            flash('Has iniciado sesion con exito.')
             return redirect(url_for('index.index'))  # Redirigir a la página de inicio
         else:
-            flash('Credenciales incorrectas.')
+            return render_template('login.html', error='Credenciales incorrectas.')
     return render_template('login.html')
 
 
@@ -36,7 +36,7 @@ def login():
 @login_requerido
 def logout():
     session.pop('user_id', None)
-    flash('Has cerrado sesión.')
+    flash('Has cerrado sesion.')
     return redirect(url_for('auth.login'))
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
@@ -47,8 +47,8 @@ def register():
         role = request.form['role']
         if not usuario_existe(username):
             registrar_usuario(username, password, role)
-            flash('Registro exitoso.')
+            flash('Usuario registrado con exito.')
             return redirect(url_for('auth.login'))
         else:
-            flash('El nombre de usuario ya está en uso.')
+            flash('El usuario ya existe.')
     return render_template('register.html')
