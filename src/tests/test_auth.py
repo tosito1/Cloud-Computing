@@ -14,12 +14,19 @@ def crear_tablas(conn):
     """)
     conn.commit()
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(scope='module')
 def setup_database():
-    conn = sqlite3.connect(":memory:")  # Conexión en memoria
-    crear_tablas(conn)  # Crear tablas necesarias
+    # Crear una conexión en memoria
+    conn = sqlite3.connect(":memory:")
+    crear_tablas(conn)  # Crear la tabla 'users'
     yield conn
     conn.close()
+
+@pytest.fixture(scope='module')
+def client():
+    app.config['TESTING'] = True  # Habilita el modo de pruebas
+    with app.test_client() as client:
+        yield client
 
 def test_register_user(client):
     # Datos del nuevo usuario
