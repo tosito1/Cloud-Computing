@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session
-from dbs.db_user import obtener_usuario_por_id
-from dbs.db_voting import eliminar_votacion_db, insertar_votacion, obtener_votaciones, actualizar_votacion, registrar_voto
-from controllers.auth import login_requerido
+from src.dbs.db_user import obtener_usuario_por_id
+from src.dbs.db_voting import eliminar_votacion_db, insertar_votacion, obtener_votaciones, actualizar_votacion, registrar_voto
+from src.controllers.auth import login_requerido
 
 votaciones_bp = Blueprint('votaciones', __name__)
 

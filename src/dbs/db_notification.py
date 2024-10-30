@@ -1,6 +1,6 @@
 import datetime
 import sqlite3
-from dbs.db_interface import conectar, cerrar
+from src.dbs.db_interface import conectar, cerrar
 
 # Crear
 def insertar_notificacion(titulo, mensaje, presidente_id, fecha_actual):

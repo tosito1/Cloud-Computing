@@ -1,10 +1,10 @@
 from flask import Flask, request
-from controllers.auth import auth_bp
-from controllers.votaciones import votaciones_bp
-from controllers.notificaciones import notificaciones_bp
-from controllers.dinero import dinero_bp
-from controllers.usuarios import usuarios_bp
-from controllers.index import index_bp
+from src.controllers.auth import auth_bp
+from src.controllers.votaciones import votaciones_bp
+from src.controllers.notificaciones import notificaciones_bp
+from src.controllers.dinero import dinero_bp
+from src.controllers.usuarios import usuarios_bp
+from src.controllers.index import index_bp
 
 app = Flask(__name__)
 app.secret_key = '123'  # Cambia esto por una clave secreta adecuada

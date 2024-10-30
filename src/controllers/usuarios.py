@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session
-from dbs.db_user import insertar_usuario, obtener_usuarios, eliminar_usuario, obtener_usuario_por_id, actualizar_usuario
-from controllers.auth import login_requerido
+from src.dbs.db_user import insertar_usuario, obtener_usuarios, eliminar_usuario, obtener_usuario_por_id, actualizar_usuario
+from src.controllers.auth import login_requerido
 
 usuarios_bp = Blueprint('usuarios', __name__)
 

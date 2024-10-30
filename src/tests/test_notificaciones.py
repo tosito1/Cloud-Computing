@@ -1,5 +1,4 @@
 import pytest
-import pytest
 from src.app import app  # Asegúrate de que importas tu aplicación Flask
 
 @pytest.fixture

@@ -1,5 +1,5 @@
 import datetime
-from dbs.db_interface import conectar, cerrar
+from src.dbs.db_interface import conectar, cerrar
 
 # Crear Cuota
 def insertar_cuota(user_id, quota_name, amount, fine_amount=None):

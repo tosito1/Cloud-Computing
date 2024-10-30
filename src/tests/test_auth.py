@@ -1,30 +1,10 @@
-import sqlite3
 import pytest
 from src.app import app  # Asegúrate de que importas tu aplicación Flask
 
-def crear_tablas(conn):
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT,
-            role TEXT
-        )
-    """)
-    conn.commit()
-
-@pytest.fixture(scope='module')
-def setup_database():
-    # Crear una conexión en memoria
-    conn = sqlite3.connect(":memory:")
-    crear_tablas(conn)  # Crear la tabla 'users'
-    yield conn
-    conn.close()
-
-@pytest.fixture(scope='module')
+@pytest.fixture
 def client():
-    app.config['TESTING'] = True  # Habilita el modo de pruebas
+    app.config['SECRET_KEY'] = '123'  # Configura la clave secreta aquí
+    app.config['TESTING'] = True      # Activa el modo de pruebas
     with app.test_client() as client:
         yield client
 

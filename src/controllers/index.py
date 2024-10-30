@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from controllers.auth import login_requerido
+from src.controllers.auth import login_requerido
 
 index_bp = Blueprint('index', __name__)
 

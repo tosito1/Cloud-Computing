@@ -1,4 +1,4 @@
-from dbs.db_interface import conectar, cerrar
+from src.dbs.db_interface import conectar, cerrar
 import bcrypt
 
 # Crear
