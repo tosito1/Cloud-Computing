@@ -18,4 +18,3 @@ def test_build(client):
 def test_test(client):
     response = client.get('/test')
     assert response.data == b'Ejecutando pruebas...'
-

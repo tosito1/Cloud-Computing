@@ -1,62 +1,31 @@
+# tests/test_db.py
 import pytest
-import sqlite3
-
-def crear_tablas(conn):
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT,
-            role TEXT
-        )
-    """)
-    conn.commit()
-
-def agregar_usuario(conn, usuario):
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO users (username, password, role) VALUES (?, ?, ?)
-    """, (usuario['username'], usuario['password'], usuario['role']))
-    conn.commit()
-
-def obtener_usuario(conn, username):
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
-    return cursor.fetchone()
-
-def eliminar_usuario(conn, username):
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM users WHERE username = ?", (username,))
-    conn.commit()
+from sqlalchemy.orm import sessionmaker
+from dbs.db_interface import create_database, Base
 
 @pytest.fixture(scope='module')
-def setup_database():
-    # Crear una conexión en memoria
-    conn = sqlite3.connect(":memory:")
-    crear_tablas(conn)  # Asegúrate de que esta función crea las tablas necesarias
-    yield conn
-    conn.close()
+def test_database():
+    # Crea la base de datos de prueba y devuelve el motor
+    engine = create_database("Paquito Flores")
+    yield engine  # Devuelve el motor para usar en las pruebas
 
-def test_agregar_usuario(setup_database):
-    conn = setup_database
-    usuario = {'username': 'test_user', 'password': 'test_password', 'role': 'socio'}
+    # Limpia la base de datos después de todas las pruebas
+    #os.remove(f'{TEST_DB_NAME}.db')
 
-    # Agregar un usuario
-    agregar_usuario(conn, usuario)
-    
-    # Verificar que el usuario fue agregado
-    result = obtener_usuario(conn, 'test_user')
-    assert result is not None
-    assert result[1] == 'test_user'
-    assert result[2] == 'test_password'
-    assert result[3] == 'socio'
+def test_tables_creation(test_database):
+    Session = sessionmaker(bind=test_database)
+    session = Session()
 
-def test_eliminar_usuario(setup_database):
-    conn = setup_database
-    # Eliminar el usuario que acabamos de agregar
-    eliminar_usuario(conn, 'test_user')
-    
-    # Verificar que el usuario fue eliminado
-    result = obtener_usuario(conn, 'test_user')
-    assert result is None
+    # Verifica que cada tabla ha sido creada
+    assert 'users' in Base.metadata.tables  # Verifica que la tabla User existe
+    assert 'notificationes' in Base.metadata.tables  # Verifica que la tabla Notification existe
+    assert 'votaciones' in Base.metadata.tables  # Verifica que la tabla Voting existe
+    assert 'opciones' in Base.metadata.tables  # Verifica que la tabla Option existe
+    assert 'votes' in Base.metadata.tables  # Verifica que la tabla Vote existe
+    assert 'cuotas' in Base.metadata.tables  # Verifica que la tabla Quota existe
+    assert 'multas' in Base.metadata.tables  # Verifica que la tabla Fine existe
+
+    session.close()  # Cierra la sesión
+
+if __name__ == '__main__':
+    pytest.main()
