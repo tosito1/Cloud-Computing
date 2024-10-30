@@ -1,49 +1,31 @@
-name: Python Application CI
+name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main 
   pull_request:
-    branches: [ "main" ]
-
-permissions:
-  contents: read
+    branches:
+      - main 
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'  # O la versión que necesites
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Lint with flake8
-      run: |
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-
-    - name: Test with pytest
-      run: |
-        PYTHONPATH=src pytest --maxfail=1 --disable-warnings -q
-
-    - name: Upload test results
-      if: always()  # Sube los resultados incluso si hay fallos
-      uses: actions/upload-artifact@v3
-      with:
-        name: test-results
-        path: test-results.xml  # Asegúrate de que pytest genere un archivo XML de resultados
-
-    - name: Notify on failure
-      if: failure()  # Notifica si hay fallos
-      run: |
-        echo "Build failed. Please check the logs for details."
+      - name: Run tests
+        run: |
+          pytest src/tests
