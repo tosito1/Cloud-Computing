@@ -1,5 +1,3 @@
-# Este flujo de trabajo instalará las dependencias de Python, ejecutará pruebas y revisará el código con linting.
-
 name: Python Application CI
 
 on:
@@ -31,14 +29,12 @@ jobs:
 
     - name: Lint with flake8
       run: |
-        # Detiene la construcción si hay errores de sintaxis o nombres indefinidos
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # Los errores se tratan como advertencias
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Test with pytest
       run: |
-        pytest --maxfail=1 --disable-warnings -q --junitxml=test-results.xml  # Genera un archivo XML con los resultados
+        PYTHONPATH=src pytest --maxfail=1 --disable-warnings -q
 
     - name: Upload test results
       if: always()  # Sube los resultados incluso si hay fallos
