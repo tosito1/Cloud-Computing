@@ -1,5 +1,5 @@
 Flask
-Flask-SQLAlchemy
-bcrypt
 SQLAlchemy
+bcrypt
 pytest
+flake8
