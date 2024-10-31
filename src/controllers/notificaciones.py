@@ -1,8 +1,8 @@
 import datetime
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session
-from src.dbs.db_notification import eliminar_notificacion_db, insertar_notificacion, obtener_notificaciones, actualizar_notificacion
-from src.controllers.auth import login_requerido
-from src.controllers.usuarios import obtener_usuario_por_id 
+from dbs.db_notification import eliminar_notificacion_db, insertar_notificacion, obtener_notificaciones, actualizar_notificacion
+from controllers.auth import login_requerido
+from controllers.usuarios import obtener_usuario_por_id 
 
 notificaciones_bp = Blueprint('notificaciones', __name__)
 

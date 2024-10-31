@@ -1,4 +1,4 @@
-from src.dbs.db_interface import Voting, conectar, cerrar
+from dbs.db_interface import Voting, conectar, cerrar
 
 # Crear Votación
 def insertar_votacion(titulo, opciones_str):

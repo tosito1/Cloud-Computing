@@ -1,6 +1,6 @@
 from invoke import task
 
-from src.app import greet
+from app import greet
 
 @task
 def test_greet(monkeypatch):

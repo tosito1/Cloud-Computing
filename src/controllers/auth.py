@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash
 from functools import wraps
-from src.dbs.db_user import obtener_usuario_por_nombre, verificar_contrasena, registrar_usuario, usuario_existe
+from dbs.db_user import obtener_usuario_por_nombre, verificar_contrasena, registrar_usuario, usuario_existe
 
 auth_bp = Blueprint('auth', __name__)
 
