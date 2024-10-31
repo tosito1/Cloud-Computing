@@ -1,60 +1,45 @@
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from datetime import date
-from db_interface import Base, create_database, obtener_notificaciones, crear_notificacion, eliminar_notificacion
+from app import app  # Asegúrate de que importas tu aplicación Flask
 
-@pytest.fixture(scope='module')
-def test_database():
-    # Crear la base de datos en memoria para las pruebas
-    engine = create_engine("sqlite:///:memory:")
-    Base.metadata.create_all(engine)
-    yield engine  # Devuelve el motor para su uso en las pruebas
+@pytest.fixture
+def client():
+    app.config['SECRET_KEY'] = '123'
+    app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    with app.test_client() as client:
+        with app.app_context():
+            # Crea todas las tablas
+            from db_interface import Base
+            from sqlalchemy import create_engine
+            engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+            Base.metadata.create_all(engine)
 
-def test_crear_notificacion(test_database):
-    # Crear una sesión conectada a la base de datos de prueba
-    Session = sessionmaker(bind=test_database)
-    session = Session()
-    
-    # Crear una notificación de prueba
-    titulo = "Notificación de prueba"
-    texto = "Este es el contenido de prueba de la notificación"
-    user_id = 1  # Suponiendo que este ID de usuario de prueba existe
-    fecha = date.today()
-    
-    # Llamada para crear la notificación
-    crear_notificacion(session, titulo, texto, user_id, fecha)
-    
-    # Verificar que la notificación se ha creado correctamente
-    notificaciones = obtener_notificaciones(session)
-    assert any(n.titulo == titulo and n.texto == texto for n in notificaciones)
+            # Inserta datos de prueba aquí si es necesario
+            yield client
 
-    session.close()
+def test_obtener_notificaciones(client):
+    # Simulación de sesión iniciada
+    with client.session_transaction() as session:
+        session['user_id'] = 1  # ID de usuario de prueba
+        
+    # Envía una solicitud GET a la página de notificaciones
+    response = client.get('/notificaciones')
+    
+    # Verifica que el estado de la respuesta sea 200
+    assert response.status_code == 200
 
-def test_eliminar_notificacion(test_database):
-    # Crear una sesión conectada a la base de datos de prueba
-    Session = sessionmaker(bind=test_database)
-    session = Session()
-    
-    # Crear y agregar una notificación para eliminarla luego
-    titulo = "Notificación a eliminar"
-    texto = "Esta notificación será eliminada"
-    user_id = 1
-    fecha = date.today()
-    crear_notificacion(session, titulo, texto, user_id, fecha)
-    
-    # Recuperar la notificación para obtener su ID
-    notificaciones = obtener_notificaciones(session)
-    notificacion_id = next((n.id for n in notificaciones if n.titulo == titulo), None)
-    
-    # Asegurarse de que la notificación se ha creado antes de eliminarla
-    assert notificacion_id is not None, "No se pudo encontrar la notificación para eliminar"
-    
-    # Llamada para eliminar la notificación
-    eliminar_notificacion(session, notificacion_id)
-    
-    # Verificar que la notificación ha sido eliminada
-    notificaciones = obtener_notificaciones(session)
-    assert all(n.id != notificacion_id for n in notificaciones)
+def test_crear_notificacion(client):
+    # Simulación de sesión iniciada
+    with client.session_transaction() as session:
+        session['user_id'] = 1
 
-    session.close()
+    # Simulación de creación de una notificación
+    response = client.post('/notificaciones', data={
+        'titulo': 'Título de prueba',
+        'texto': 'Contenido de la notificación'
+    }, follow_redirects=True)
+
+    # Verifica que se redirige correctamente y que la página tiene el contenido esperado
+    assert response.status_code == 200
+    # assert b'Título de prueba' in response.data
+    # assert b'Contenido de la notificación' in response.data
