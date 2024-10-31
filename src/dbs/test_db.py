@@ -1,31 +1,26 @@
-# tests/test_db.py
 import pytest
 from sqlalchemy.orm import sessionmaker
 from db_interface import Base, create_database
 
 @pytest.fixture(scope='module')
 def test_database():
-    # Crea la base de datos de prueba y devuelve el motor
     engine = create_database("Paquito Flores")
-    yield engine  # Devuelve el motor para usar en las pruebas
+    yield engine 
 
-    # Limpia la base de datos después de todas las pruebas
-    #os.remove(f'{TEST_DB_NAME}.db')
 
 def test_tables_creation(test_database):
     Session = sessionmaker(bind=test_database)
     session = Session()
 
-    # Verifica que cada tabla ha sido creada
-    assert 'users' in Base.metadata.tables  # Verifica que la tabla User existe
-    assert 'notificationes' in Base.metadata.tables  # Verifica que la tabla Notification existe
-    assert 'votaciones' in Base.metadata.tables  # Verifica que la tabla Voting existe
-    assert 'opciones' in Base.metadata.tables  # Verifica que la tabla Option existe
-    assert 'votes' in Base.metadata.tables  # Verifica que la tabla Vote existe
-    assert 'cuotas' in Base.metadata.tables  # Verifica que la tabla Quota existe
-    assert 'multas' in Base.metadata.tables  # Verifica que la tabla Fine existe
+    assert 'users' in Base.metadata.tables  
+    assert 'notificationes' in Base.metadata.tables  
+    assert 'votaciones' in Base.metadata.tables 
+    assert 'opciones' in Base.metadata.tables 
+    assert 'votes' in Base.metadata.tables  
+    assert 'cuotas' in Base.metadata.tables 
+    assert 'multas' in Base.metadata.tables 
 
-    session.close()  # Cierra la sesión
+    session.close()
 
 if __name__ == '__main__':
     pytest.main()

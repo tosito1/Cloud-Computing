@@ -7,7 +7,6 @@ def test_greet(monkeypatch):
     import io
     from contextlib import redirect_stdout
 
-    # Saludo con nombre por defecto
     f = io.StringIO()
     with redirect_stdout(f):
         greet(None)
@@ -19,4 +18,4 @@ def test_greet(monkeypatch):
 def test(c):
     """Ejecuta las pruebas."""
     print("Ejecutando pruebas...")
-    c.run("pytest")  # O el comando que uses para ejecutar pruebas
+    c.run("pytest") 
