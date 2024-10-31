@@ -28,5 +28,5 @@ jobs:
           
       - name: Run tests
         run: |
-          python -m pytest src/tests/test_db.py
+          python dbs\test_db.py
 
