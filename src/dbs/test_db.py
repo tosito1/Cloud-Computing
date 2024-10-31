@@ -1,7 +1,7 @@
 # tests/test_db.py
 import pytest
 from sqlalchemy.orm import sessionmaker
-from dbs.db_interface import create_database, Base
+from db_interface import Base, create_database
 
 @pytest.fixture(scope='module')
 def test_database():
