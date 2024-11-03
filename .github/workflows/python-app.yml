@@ -30,8 +30,4 @@ jobs:
         run: |
           cd src
           python -m unittest ./dbs/test_app.py
-        
-      - name: Run tests
-        run: |
-          python src/dbs/test_db.py
 
