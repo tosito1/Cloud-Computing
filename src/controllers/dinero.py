@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash, session
-from dbs.db_money import insertar_cuota, obtener_cuotas, insertar_multa, obtener_multas, actualizar_cuota
+from flask import Blueprint, render_template, redirect, url_for, request, flash
+from dbs.db_money import insertar_cuota, obtener_cuotas, insertar_multa, obtener_multas
 from controllers.auth import login_requerido
 from dbs.db_user import obtener_usuarios
 

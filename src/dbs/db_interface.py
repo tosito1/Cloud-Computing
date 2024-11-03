@@ -9,8 +9,7 @@ import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
-# nombre de la base de datos
-db_path = 'Paquito flores.db'
+db_path = 'Test.db'
 
 Base = declarative_base()
 
@@ -114,7 +113,7 @@ def on_create_database():
         messagebox.showerror("Error", f"Ocurrió un error al crear la base de datos: {e}")
 
 
-def conectar():
+def conectar(db_path):
     """Función para conectar a la base de datos."""
     try:
         conn = sqlite3.connect(db_path)

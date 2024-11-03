@@ -2,7 +2,7 @@ from dbs.db_interface import Voting, conectar, cerrar
 
 # Crear Votación
 def insertar_votacion(titulo, opciones_str):
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -27,7 +27,7 @@ def insertar_votacion(titulo, opciones_str):
 
 # Crear Opciones
 def insertar_opcion(votacion_id, opcion):
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -39,7 +39,7 @@ def insertar_opcion(votacion_id, opcion):
             cerrar(conn)
 
 def obtener_votaciones():
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -80,7 +80,7 @@ def obtener_votaciones():
 
 # Actualizar Votación
 def actualizar_votacion(votacion_id, titulo, descripcion):
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -93,7 +93,7 @@ def actualizar_votacion(votacion_id, titulo, descripcion):
 
 # Eliminar Votación
 def eliminar_votacion_db(votacion_id):
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -115,7 +115,7 @@ def eliminar_votacion_db(votacion_id):
 
 
 def registrar_voto(opcion_id, user_id):
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()

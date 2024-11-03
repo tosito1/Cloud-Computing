@@ -9,7 +9,7 @@ def insertar_notificacion(titulo, mensaje, presidente_id, fecha_actual):
         print("Título, mensaje y presidente_id son obligatorios.")
         return
 
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             with conn:
@@ -27,7 +27,7 @@ def insertar_notificacion(titulo, mensaje, presidente_id, fecha_actual):
 
 # Leer
 def obtener_notificaciones():
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -42,7 +42,7 @@ def obtener_notificaciones():
 
 # Actualizar
 def actualizar_notificacion(notificacion_id, titulo, mensaje):
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -55,7 +55,7 @@ def actualizar_notificacion(notificacion_id, titulo, mensaje):
 
 # Eliminar
 def eliminar_notificacion_db(notificacion_id):
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()

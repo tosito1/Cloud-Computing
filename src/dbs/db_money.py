@@ -3,7 +3,7 @@ from dbs.db_interface import conectar, cerrar
 
 # Crear Cuota
 def insertar_cuota(user_id, quota_name, amount, fine_amount=None):
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -35,7 +35,7 @@ def insertar_cuota(user_id, quota_name, amount, fine_amount=None):
 
 # Crear Multa
 def insertar_multa(user_id, amount, quota_id):
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -55,7 +55,7 @@ def insertar_multa(user_id, amount, quota_id):
 
 # Leer Cuotas
 def obtener_cuotas():
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -69,7 +69,7 @@ def obtener_cuotas():
 
 # Leer Multas
 def obtener_multas():
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -82,21 +82,21 @@ def obtener_multas():
             cerrar(conn)
 
 # Actualizar Cuota
-def actualizar_cuota(cuota_id, monto, fecha):
-    conn = conectar()
-    if conn:
-        try:
-            cursor = conn.cursor()
-            cursor.execute('UPDATE cuotas SET monto = ?, fecha = ? WHERE id = ?', (monto, fecha, cuota_id))
-            conn.commit()
-        except Exception as e:
-            print(f"Error al actualizar cuota: {e}")
-        finally:
-            cerrar(conn)
+# def actualizar_cuota(cuota_id, monto, fecha):
+#     conn = conectar('Test.db')
+#     if conn:
+#         try:
+#             cursor = conn.cursor()
+#             cursor.execute('UPDATE cuotas SET monto = ?, fecha = ? WHERE id = ?', (monto, fecha, cuota_id))
+#             conn.commit()
+#         except Exception as e:
+#             print(f"Error al actualizar cuota: {e}")
+#         finally:
+#             cerrar(conn)
 
 # Eliminar Cuota
 def eliminar_cuota(cuota_id):
-    conn = conectar()
+    conn = conectar('Test.db')
     if conn:
         try:
             cursor = conn.cursor()
