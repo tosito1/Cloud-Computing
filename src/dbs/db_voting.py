@@ -1,20 +1,22 @@
 from dbs.db_interface import Voting, conectar, cerrar
 
 # Crear Votación
-def insertar_votacion(titulo, opciones_str):
-    conn = conectar('Test.db')
+def insertar_votacion(titulo, opciones_str, path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
             # Insertar la votación y obtener su ID
             cursor.execute('INSERT INTO votaciones (title, description) VALUES (?, ?)', (titulo, opciones_str))
             votacion_id = cursor.lastrowid  # Obtener el ID de la votación recién creada
+            print("Votación insertada correctamente.")
 
             # Separar las opciones en un listado y guardar cada opción en la tabla de opciones
             opciones = opciones_str.split(',')  # Suponiendo que las opciones están separadas por comas
             for opcion in opciones:
                 opcion_texto = opcion.strip()  # Limpiar espacios en blanco
                 cursor.execute('INSERT INTO opciones (voting_id, option_text) VALUES (?, ?)', (votacion_id, opcion_texto))
+            print("Opciones de votación insertada correctamente.")
 
             conn.commit()
             return votacion_id  # Retornar el ID de la nueva votación
@@ -26,20 +28,21 @@ def insertar_votacion(titulo, opciones_str):
 
 
 # Crear Opciones
-def insertar_opcion(votacion_id, opcion):
-    conn = conectar('Test.db')
+def insertar_opcion(votacion_id, opcion, path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
             cursor.execute('INSERT INTO opciones (votacion_id, opcion) VALUES (?, ?)', (votacion_id, opcion))
             conn.commit()
+            print("Opciones de votación insertada correctamente.")
         except Exception as e:
             print(f"Error al insertar opción: {e}")
         finally:
             cerrar(conn)
 
-def obtener_votaciones():
-    conn = conectar('Test.db')
+def obtener_votaciones(path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
@@ -79,8 +82,8 @@ def obtener_votaciones():
 
 
 # Actualizar Votación
-def actualizar_votacion(votacion_id, titulo, descripcion):
-    conn = conectar('Test.db')
+def actualizar_votacion(votacion_id, titulo, descripcion, path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
@@ -92,17 +95,20 @@ def actualizar_votacion(votacion_id, titulo, descripcion):
             cerrar(conn)
 
 # Eliminar Votación
-def eliminar_votacion_db(votacion_id):
-    conn = conectar('Test.db')
+def eliminar_votacion_db(votacion_id, path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
 
             # Eliminar todos los votos asociados a la votación
             cursor.execute('DELETE FROM votes WHERE option_id IN (SELECT id FROM opciones WHERE voting_id = ?)', (votacion_id,))
+            print("Votos de eliminados correctamente.")
             # Eliminar la votación y sus opciones
             cursor.execute('DELETE FROM opciones WHERE voting_id = ?', (votacion_id,))
+            print("Opciones de la votación correctamente.")
             cursor.execute('DELETE FROM votaciones WHERE id = ?', (votacion_id,))
+            print("Votación eliminada correctamente.")
             conn.commit()
             return True
         except Exception as e:
@@ -114,8 +120,8 @@ def eliminar_votacion_db(votacion_id):
 
 
 
-def registrar_voto(opcion_id, user_id):
-    conn = conectar('Test.db')
+def registrar_voto(opcion_id, user_id, path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
@@ -128,6 +134,7 @@ def registrar_voto(opcion_id, user_id):
             # Insertar el voto
             cursor.execute('INSERT INTO votes (user_id, option_id) VALUES (?, ?)', (user_id, opcion_id))
             conn.commit()
+            print("Voto insertado correctamente.")
             return True
         except Exception as e:
             print(f"Error al registrar voto: {e}")

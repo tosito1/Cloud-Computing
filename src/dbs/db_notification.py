@@ -3,13 +3,13 @@ import sqlite3
 from dbs.db_interface import conectar, cerrar
 
 # Crear
-def insertar_notificacion(titulo, mensaje, presidente_id, fecha_actual):
+def insertar_notificacion(titulo, mensaje, presidente_id, fecha_actual, path_db = 'Paquito Flores.db'):
     # Validación de entradas
     if not titulo or not mensaje or not presidente_id:
         print("Título, mensaje y presidente_id son obligatorios.")
         return
 
-    conn = conectar('Test.db')
+    conn = conectar(path_db)
     if conn:
         try:
             with conn:
@@ -26,8 +26,8 @@ def insertar_notificacion(titulo, mensaje, presidente_id, fecha_actual):
         print("No se pudo establecer la conexión a la base de datos.")
 
 # Leer
-def obtener_notificaciones():
-    conn = conectar('Test.db')
+def obtener_notificaciones(path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
@@ -41,8 +41,8 @@ def obtener_notificaciones():
             cerrar(conn)
 
 # Actualizar
-def actualizar_notificacion(notificacion_id, titulo, mensaje):
-    conn = conectar('Test.db')
+def actualizar_notificacion(notificacion_id, titulo, mensaje, path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
@@ -54,13 +54,14 @@ def actualizar_notificacion(notificacion_id, titulo, mensaje):
             cerrar(conn)
 
 # Eliminar
-def eliminar_notificacion_db(notificacion_id):
-    conn = conectar('Test.db')
+def eliminar_notificacion_db(notificacion_id, path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
             cursor.execute('DELETE FROM notificationes WHERE id = ?', (notificacion_id,))
             conn.commit()
+            print("Notificación eliminada correctamente.")
         except Exception as e:
             print(f"Error al eliminar notificación: {e}")
         finally:

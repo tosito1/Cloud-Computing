@@ -3,7 +3,7 @@ import bcrypt
 
 # Crear
 def insertar_usuario(username, password, role):
-    conn = conectar()
+    conn = conectar('Paquito Flores.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -16,7 +16,7 @@ def insertar_usuario(username, password, role):
 
 # Leer
 def obtener_usuarios():
-    conn = conectar()
+    conn = conectar('Paquito Flores.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -31,7 +31,7 @@ def obtener_usuarios():
 
 
 def obtener_usuario_por_id(user_id):
-    conn = conectar()
+    conn = conectar('Paquito Flores.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -44,7 +44,7 @@ def obtener_usuario_por_id(user_id):
             cerrar(conn)
 
 def obtener_usuario_por_nombre(username):
-    conn = conectar()
+    conn = conectar('Paquito Flores.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -58,7 +58,7 @@ def obtener_usuario_por_nombre(username):
 
 # Actualizar
 def actualizar_usuario(user_id, username, password, role):
-    conn = conectar()
+    conn = conectar('Paquito Flores.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -71,7 +71,7 @@ def actualizar_usuario(user_id, username, password, role):
 
 # Eliminar
 def eliminar_usuario(user_id):
-    conn = conectar()
+    conn = conectar('Paquito Flores.db')
     if conn:
         try:
             cursor = conn.cursor()
@@ -84,7 +84,7 @@ def eliminar_usuario(user_id):
 
 def registrar_usuario(username, password, role):
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    conn = conectar()
+    conn = conectar('Paquito Flores.db')
     try:
         cursor = conn.cursor()
         cursor.execute("INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)", 
@@ -98,7 +98,7 @@ def registrar_usuario(username, password, role):
 
 
 def usuario_existe(username):
-    conn = conectar()
+    conn = conectar('Paquito Flores.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
     user = cursor.fetchone()

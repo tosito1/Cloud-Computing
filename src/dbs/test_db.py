@@ -4,7 +4,7 @@ from db_interface import Base, create_database
 
 @pytest.fixture(scope='module')
 def test_database():
-    engine = create_database("Paquito Flores")
+    engine = create_database("Test")
     yield engine 
 
 

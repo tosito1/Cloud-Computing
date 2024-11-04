@@ -2,8 +2,8 @@ import datetime
 from dbs.db_interface import conectar, cerrar
 
 # Crear Cuota
-def insertar_cuota(user_id, quota_name, amount, fine_amount=None):
-    conn = conectar('Test.db')
+def insertar_cuota(user_id, quota_name, amount, path_db = 'Paquito Flores.db',fine_amount=None):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
@@ -14,6 +14,7 @@ def insertar_cuota(user_id, quota_name, amount, fine_amount=None):
             ''', (user_id, quota_name, amount, datetime.datetime.utcnow(), 'pagada'))
             
             quota_id = cursor.lastrowid  # Obtener el ID de la cuota recién insertada
+            print("Cuota insertada correctamente.")
 
             # Si hay un monto de multa, inserta la multa y asóciala a la cuota
             if fine_amount:
@@ -21,6 +22,7 @@ def insertar_cuota(user_id, quota_name, amount, fine_amount=None):
                     INSERT INTO multas (user_id, amount, quota_id, date)
                     VALUES (?, ?, ?, ?)
                 ''', (user_id, fine_amount, quota_id, datetime.datetime.utcnow()))
+                print("Multa insertada correctamente.")
 
             conn.commit()  # Guardar los cambios
             return True
@@ -34,8 +36,8 @@ def insertar_cuota(user_id, quota_name, amount, fine_amount=None):
 
 
 # Crear Multa
-def insertar_multa(user_id, amount, quota_id):
-    conn = conectar('Test.db')
+def insertar_multa(user_id, amount, quota_id, path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
@@ -44,6 +46,7 @@ def insertar_multa(user_id, amount, quota_id):
                 VALUES (?, ?, ?)
             ''', (user_id, amount, quota_id))
             conn.commit()
+            print("Multa insertada correctamente.")
             return True
         except Exception as e:
             print(f"Error al registrar la multa: {e}")
@@ -54,8 +57,8 @@ def insertar_multa(user_id, amount, quota_id):
 
 
 # Leer Cuotas
-def obtener_cuotas():
-    conn = conectar('Test.db')
+def obtener_cuotas(path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
@@ -68,8 +71,8 @@ def obtener_cuotas():
             cerrar(conn)
 
 # Leer Multas
-def obtener_multas():
-    conn = conectar('Test.db')
+def obtener_multas(path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
@@ -82,8 +85,8 @@ def obtener_multas():
             cerrar(conn)
 
 # Actualizar Cuota
-# def actualizar_cuota(cuota_id, monto, fecha):
-#     conn = conectar('Test.db')
+# def actualizar_cuota(cuota_id, monto, fecha, path_db = 'Paquito Flores.db'):
+#     conn = conectar(path_db)
 #     if conn:
 #         try:
 #             cursor = conn.cursor()
@@ -95,13 +98,14 @@ def obtener_multas():
 #             cerrar(conn)
 
 # Eliminar Cuota
-def eliminar_cuota(cuota_id):
-    conn = conectar('Test.db')
+def eliminar_cuota(cuota_id, path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
     if conn:
         try:
             cursor = conn.cursor()
             cursor.execute('DELETE FROM cuotas WHERE id = ?', (cuota_id,))
             conn.commit()
+            print("Cuota Eliminada correctamente.")
         except Exception as e:
             print(f"Error al eliminar cuota: {e}")
         finally:
