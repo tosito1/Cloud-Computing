@@ -19,14 +19,15 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'  # O la versión que necesites
+          python-version: '3.9'  
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          
-      - name: Run tests
+
+      - name: Run Unitest
         run: |
-          python src/dbs/test_db.py
+          cd src
+          python -m unittest ./dbs/test_app.py
 
