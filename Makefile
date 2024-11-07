@@ -16,7 +16,7 @@ test:
 
 # Iniciar la base de datos (por ejemplo, creando tablas necesarias)
 db-init:
-	$(PYTHON) $(SRC_DIR)/manage_db.py init
+	$(PYTHON) $(SRC_DIR)/dbs/db_interface.py
 
 
 # Ejecutar el servidor en modo de desarrollo
