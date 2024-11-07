@@ -4,3 +4,4 @@ bcrypt
 pytest
 flake8
 colorama
+requests
