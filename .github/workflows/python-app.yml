@@ -26,20 +26,30 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Start the Flask server in the background
       - name: Start Flask server
         run: |
-          cd src
-          nohup python -m flask run --host=127.0.0.1 --port=5000 &
+          nohup python src/app.py &  # Asegúrate de que este sea el comando correcto para iniciar tu servidor Flask
 
-      # Run the unit tests
-      - name: Run UnitTests
+      - name: Wait for Flask to start
+        run: |
+          # Esperar hasta que el servidor esté disponible
+          for i in {1..10}; do
+            if curl --silent --fail http://127.0.0.1:5000; then
+              echo "Flask is up and running!"
+              break
+            fi
+            echo "Waiting for Flask to be available..."
+            sleep 2
+          done
+
+      - name: Run Unit tests
         run: |
           cd src
           python -m unittest ./dbs/test_app.py
 
-      # Kill the Flask server after the tests
       - name: Stop Flask server
         run: |
+          # Encuentra el PID del proceso de Flask y lo termina
+          pkill -f 'python src/app.py'
           pkill -f "flask run"
 
