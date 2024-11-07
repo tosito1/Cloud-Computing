@@ -127,3 +127,47 @@ class TestVotaciones(unittest.TestCase):
         opcion_id = opciones[0]["id"]
         resultado = registrar_voto(opcion_id, 1, 'Test.db')
         self.assertTrue(resultado)
+
+import unittest
+import requests
+
+class TestEndpointAuth(unittest.TestCase):
+
+    def test_login(self):
+        # Datos de prueba para el login
+        data = {
+            "username": "admin",
+            "password": "admin"
+        }
+
+        # Realiza la solicitud POST al endpoint /login
+        response = requests.post(
+            "http://127.0.0.1:5000/login",
+            data=data,  # Enviar datos como formulario
+            allow_redirects=False  # No seguir la redirección automáticamente
+        )
+
+        # Verifica el código de estado de redirección
+        self.assertEqual(response.status_code, 302)  # Espera redirección 302
+
+        # Verifica si la redirección es a la página de inicio
+        self.assertEqual(response.headers["Location"], "/index")
+        print("Credenciales correctas")
+
+    def test_login_fail(self):
+        # Intento de login con credenciales incorrectas
+        data = {
+            "username": "admin",
+            "password": "wrongpassword"
+        }
+
+        response = requests.post(
+            "http://127.0.0.1:5000/login",
+            data=data,
+            allow_redirects=False
+        )
+
+        # Verificar que el código de estado sea 200, ya que la página de login no redirige
+        self.assertEqual(response.status_code, 200)
+
+        print("Credenciales incorrectas")
