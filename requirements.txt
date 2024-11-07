@@ -3,3 +3,4 @@ SQLAlchemy
 bcrypt
 pytest
 flake8
+colorama

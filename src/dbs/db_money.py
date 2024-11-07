@@ -1,4 +1,5 @@
 import datetime
+from colorama import Fore
 from dbs.db_interface import conectar, cerrar
 
 # Crear Cuota
@@ -14,7 +15,7 @@ def insertar_cuota(user_id, quota_name, amount, path_db = 'Paquito Flores.db',fi
             ''', (user_id, quota_name, amount, datetime.datetime.utcnow(), 'pagada'))
             
             quota_id = cursor.lastrowid  # Obtener el ID de la cuota recién insertada
-            print("Cuota insertada correctamente.")
+            print(Fore.GREEN + "Cuota insertada correctamente.")
 
             # Si hay un monto de multa, inserta la multa y asóciala a la cuota
             if fine_amount:
@@ -22,12 +23,12 @@ def insertar_cuota(user_id, quota_name, amount, path_db = 'Paquito Flores.db',fi
                     INSERT INTO multas (user_id, amount, quota_id, date)
                     VALUES (?, ?, ?, ?)
                 ''', (user_id, fine_amount, quota_id, datetime.datetime.utcnow()))
-                print("Multa insertada correctamente.")
+                print(Fore.GREEN + "Multa insertada correctamente.")
 
             conn.commit()  # Guardar los cambios
             return True
         except Exception as e:
-            print(f"Error al registrar la cuota: {e}")
+            print(Fore.RED + f"Error al registrar la cuota: {e}")
             return False
         finally:
             cerrar(conn)
@@ -46,10 +47,10 @@ def insertar_multa(user_id, amount, quota_id, path_db = 'Paquito Flores.db'):
                 VALUES (?, ?, ?)
             ''', (user_id, amount, quota_id))
             conn.commit()
-            print("Multa insertada correctamente.")
+            print(Fore.GREEN + "Multa insertada correctamente.")
             return True
         except Exception as e:
-            print(f"Error al registrar la multa: {e}")
+            print(Fore.RED + f"Error al registrar la multa: {e}")
             return False
         finally:
             cerrar(conn)
@@ -64,9 +65,10 @@ def obtener_cuotas(path_db = 'Paquito Flores.db'):
             cursor = conn.cursor()
             cursor.execute('SELECT * FROM cuotas')
             cuotas = cursor.fetchall()
+            print(Fore.YELLOW + "Cuota obtenida correctamente.")
             return cuotas
         except Exception as e:
-            print(f"Error al obtener cuotas: {e}")
+            print(Fore.RED + f"Error al obtener cuotas: {e}")
         finally:
             cerrar(conn)
 
@@ -78,9 +80,10 @@ def obtener_multas(path_db = 'Paquito Flores.db'):
             cursor = conn.cursor()
             cursor.execute('SELECT * FROM multas')
             multas = cursor.fetchall()
+            print(Fore.YELLOW + "Multa obtenida correctamente.")
             return multas
         except Exception as e:
-            print(f"Error al obtener multas: {e}")
+            print(Fore.RED + f"Error al obtener multas: {e}")
         finally:
             cerrar(conn)
 
@@ -105,8 +108,8 @@ def eliminar_cuota(cuota_id, path_db = 'Paquito Flores.db'):
             cursor = conn.cursor()
             cursor.execute('DELETE FROM cuotas WHERE id = ?', (cuota_id,))
             conn.commit()
-            print("Cuota Eliminada correctamente.")
+            print(Fore.GREEN + "Cuota Eliminada correctamente.")
         except Exception as e:
-            print(f"Error al eliminar cuota: {e}")
+            print(Fore.RED + f"Error al eliminar cuota: {e}")
         finally:
             cerrar(conn)

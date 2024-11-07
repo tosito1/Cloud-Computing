@@ -1,5 +1,6 @@
 from dbs.db_interface import conectar, cerrar
 import bcrypt
+from colorama import Fore
 
 # Crear
 def insertar_usuario(username, password, role):
@@ -10,7 +11,7 @@ def insertar_usuario(username, password, role):
             cursor.execute('INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)', (username, password, role))
             conn.commit()
         except Exception as e:
-            print(f"Error al insertar usuario: {e}")
+            print(Fore.RED + f"Error al insertar usuario: {e}")
         finally:
             cerrar(conn)
 
@@ -24,7 +25,7 @@ def obtener_usuarios():
             usuarios = cursor.fetchall()  # Obtén todos los resultados
             return usuarios  # Devuelve la lista de usuarios
         except Exception as e:
-            print(f"Error al obtener usuarios: {e}")
+            print(Fore.RED + f"Error al obtener usuarios: {e}")
             return []  # Devuelve una lista vacía en caso de error
         finally:
             cerrar(conn)  # Asegúrate de cerrar la conexión
@@ -39,7 +40,7 @@ def obtener_usuario_por_id(user_id):
             user = cursor.fetchone()
             return user
         except Exception as e:
-            print(f"Error al obtener usuario: {e}")
+            print(Fore.RED + f"Error al obtener usuario: {e}")
         finally:
             cerrar(conn)
 
@@ -52,7 +53,7 @@ def obtener_usuario_por_nombre(username):
             user = cursor.fetchone()
             return user
         except Exception as e:
-            print(f"Error al obtener usuario: {e}")
+            print(Fore.RED + f"Error al obtener usuario: {e}")
         finally:
             cerrar(conn)
 
@@ -65,7 +66,7 @@ def actualizar_usuario(user_id, username, password, role):
             cursor.execute('UPDATE users SET username = ?, password_hash = ?, role = ? WHERE id = ?', (username, password, role, user_id))
             conn.commit()
         except Exception as e:
-            print(f"Error al actualizar usuario: {e}")
+            print(Fore.RED + f"Error al actualizar usuario: {e}")
         finally:
             cerrar(conn)
 
@@ -78,7 +79,7 @@ def eliminar_usuario(user_id):
             cursor.execute('DELETE FROM users WHERE id = ?', (user_id,))
             conn.commit()
         except Exception as e:
-            print(f"Error al eliminar usuario: {e}")
+            print(Fore.RED + f"Error al eliminar usuario: {e}")
         finally:
             cerrar(conn)
 
@@ -91,7 +92,7 @@ def registrar_usuario(username, password, role):
                        (username, hashed_password, role))
         conn.commit()
     except Exception as e:
-        print(f"Error al registrar usuario: {e}")
+        print(Fore.RED + f"Error al registrar usuario: {e}")
     finally:
         cursor.close()
         cerrar(conn)

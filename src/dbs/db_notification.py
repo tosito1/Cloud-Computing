@@ -1,12 +1,13 @@
 import datetime
 import sqlite3
+from colorama import Fore
 from dbs.db_interface import conectar, cerrar
 
 # Crear
 def insertar_notificacion(titulo, mensaje, presidente_id, fecha_actual, path_db = 'Paquito Flores.db'):
     # Validación de entradas
     if not titulo or not mensaje or not presidente_id:
-        print("Título, mensaje y presidente_id son obligatorios.")
+        print(Fore.YELLOW + "Título, mensaje y presidente_id son obligatorios.")
         return
 
     conn = conectar(path_db)
@@ -15,15 +16,15 @@ def insertar_notificacion(titulo, mensaje, presidente_id, fecha_actual, path_db 
             with conn:
                 cursor = conn.cursor()
                 cursor.execute('INSERT INTO notificationes (title, text, president_id, date) VALUES (?, ?, ?, ?)', (titulo, mensaje, presidente_id, fecha_actual))
-                print("Notificación insertada correctamente.")
+                print(Fore.GREEN + "Notificación insertada correctamente.")
         except sqlite3.IntegrityError as ie:
-            print(f"Error de integridad al insertar notificación: {ie}")
+            print(Fore.RED + f"Error de integridad al insertar notificación: {ie}")
         except sqlite3.Error as e:
-            print(f"Error al insertar notificación: {e}")
+            print(Fore.RED + f"Error al insertar notificación: {e}")
         finally:
             cerrar(conn)
     else:
-        print("No se pudo establecer la conexión a la base de datos.")
+        print(Fore.RED + "No se pudo establecer la conexión a la base de datos.")
 
 # Leer
 def obtener_notificaciones(path_db = 'Paquito Flores.db'):
@@ -32,11 +33,11 @@ def obtener_notificaciones(path_db = 'Paquito Flores.db'):
         try:
             cursor = conn.cursor()
             cursor.execute('SELECT * FROM notificationes')
-            print(datetime.datetime.now)
             notificaciones = cursor.fetchall()
+            print(Fore.YELLOW + "Notifiacion obtenida correctamente.")
             return notificaciones
         except Exception as e:
-            print(f"Error al obtener notificaciones: {e}")
+            print(Fore.RED + f"Error al obtener notificaciones: {e}")
         finally:
             cerrar(conn)
 
@@ -49,7 +50,7 @@ def actualizar_notificacion(notificacion_id, titulo, mensaje, path_db = 'Paquito
             cursor.execute('UPDATE notificationes SET titulo = ?, mensaje = ? WHERE id = ?', (titulo, mensaje, notificacion_id))
             conn.commit()
         except Exception as e:
-            print(f"Error al actualizar notificación: {e}")
+            print(Fore.RED + f"Error al actualizar notificación: {e}")
         finally:
             cerrar(conn)
 
@@ -61,8 +62,8 @@ def eliminar_notificacion_db(notificacion_id, path_db = 'Paquito Flores.db'):
             cursor = conn.cursor()
             cursor.execute('DELETE FROM notificationes WHERE id = ?', (notificacion_id,))
             conn.commit()
-            print("Notificación eliminada correctamente.")
+            print(Fore.GREEN + "Notificación eliminada correctamente.")
         except Exception as e:
-            print(f"Error al eliminar notificación: {e}")
+            print(Fore.RED + f"Error al eliminar notificación: {e}")
         finally:
             cerrar(conn)
