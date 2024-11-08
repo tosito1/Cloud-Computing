@@ -20,22 +20,6 @@ Para gestionar las tareas repetitivas de ejecución de tests y otros procesos, s
 - **Ubicación del archivo `Makefile`**: [Makefile](https://github.com/tosito1/Cloud-Computing/blob/main/Makefile)
 
 #### **Captura de Pantalla 📸**:
-- **Añadir una captura de pantalla** que muestre la ejecución de **`make test`** en tu entorno local o en Windows, mostrando los tests siendo ejecutados correctamente.
-
----
-
-### 2. **Biblioteca de Aserciones: `unittest` ✅**
-
-Para las aserciones, se optó por **`unittest`** junto con la librería estándar `assert` de Python, ya que proporciona una solución sencilla, robusta y no requiere dependencias externas.
-
-#### **Elección y Justificación:**
-- **Facilidad de uso**: `unittest` es parte de la biblioteca estándar de Python, lo que facilita su integración y uso sin necesidad de instalaciones adicionales.
-- **Integración con CI**: Al ser parte de la biblioteca estándar, facilita la integración de las pruebas en el flujo de trabajo de CI sin configuraciones extra.
-
-#### **Referencias:**
-- **Ubicación del archivo de pruebas**: `src/dbs/test_app.py`
-
-#### **Captura de Pantalla 📸**:
 - make run:
 
   ![make run](https://github.com/tosito1/Cloud-Computing/blob/main/docs/img/Makefile%20Run.png)
@@ -47,6 +31,21 @@ Para las aserciones, se optó por **`unittest`** junto con la librería estánda
 - make db-init:
 
   ![make db-init](https://github.com/tosito1/Cloud-Computing/blob/main/docs/img/Makefile%20db-init.png)
+
+---
+
+### 2. **Biblioteca de Aserciones: `unittest` ✅**
+
+Para las aserciones, se optó por **`unittest`** junto con la librería estándar `assert` de Python, ya que proporciona una solución sencilla, robusta y no requiere dependencias externas.
+
+El uso de assert asegura que el código se comporte como se espera, detectando rápidamente cualquier error en el flujo del programa. Esto mejora la confiabilidad y robustez del proyecto, especialmente en la fase de desarrollo y pruebas.
+
+#### **Elección y Justificación:**
+- **Facilidad de uso**: `unittest` es parte de la biblioteca estándar de Python, lo que facilita su integración y uso sin necesidad de instalaciones adicionales.
+- **Integración con CI**: Al ser parte de la biblioteca estándar, facilita la integración de las pruebas en el flujo de trabajo de CI sin configuraciones extra.
+
+#### **Referencias:**
+- **Ubicación del archivo de pruebas**: `src/dbs/test_app.py`
 
 ---
 
