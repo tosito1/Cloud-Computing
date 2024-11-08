@@ -134,7 +134,8 @@ Después de configurar GitHub Actions, el sistema de CI se ejecuta automáticame
 - **Ubicación de los Resultados**: Los logs de ejecución de los tests se pueden ver en la pestaña **"Actions"** en el repositorio de GitHub, dentro del workflow correspondiente.
 
 #### **Captura de Pantalla 📸**:
-- **Añadir captura de pantalla** del **log de ejecución** 
+- Captura de Wrokflow
+  ![Workflow]([https://github.com/tosito1/Cloud-Computing/blob/main/docs/img/Makefile%20db-init.png](https://github.com/tosito1/Cloud-Computing/blob/main/docs/img/Workflow.PNG))
 
 ---
 
