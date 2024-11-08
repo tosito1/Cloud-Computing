@@ -28,7 +28,7 @@ jobs:
 
       - name: Start Flask server
         run: |
-          nohup python src/app.py &  # Asegúrate de que este sea el comando correcto para iniciar tu servidor Flask
+          nohup python src/app.py & 
 
       - name: Wait for Flask to start
         run: |
