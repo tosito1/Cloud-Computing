@@ -34,13 +34,17 @@ El proyecto se desarrolla siguiendo una serie de hitos que dividen el trabajo en
    - Documentación de las herramientas y procesos utilizados en el desarrollo.
    - Configuración de las buenas prácticas con Git y GitHub.
 
-2. **Hito 2: Integración continua**
+2. **[Hito 2](docs/Hitos/Hito1/Hito12.md): Integración continua**
+   - Seleccionar y aplicar biblioteca de aserciones en el proyecto.
+   - Implementar y verificar el avance del código.
+   - Configurar marco de pruebas en el proyecto.
+   - Configurar y utilizar administrador de tareas.
    
-3. **Hito 3: Diseño de microservicios**
+4. **Hito 3: Diseño de microservicios**
    
-4. **Hito 4: Composición de servicios**
+5. **Hito 4: Composición de servicios**
 
-5. **Hito 5: Despliegue de la aplicación en un PaaS**
+6. **Hito 5: Despliegue de la aplicación en un PaaS**
 
 ---
 
@@ -56,10 +60,6 @@ El proyecto se desarrolla siguiendo una serie de hitos que dividen el trabajo en
 
 - **Notificaciones y Comunicación:**
   - Envío de notificaciones a todos los socios para mantenerlos informados sobre eventos y actualizaciones importantes.
-
-- **Organización de Eventos:**
-  - Creación y gestión de eventos relacionados con la caseta de feria.
-  - Supervisión de la participación de los socios en las actividades de la caseta.
 
 - **Votaciones:**
   - Creación de votaciones para la toma de decisiones importantes en la organización de la caseta.
