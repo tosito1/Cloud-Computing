@@ -12,6 +12,7 @@ install:
 
 # Ejecutar los tests en el directorio src
 test:
+	cmd /c "start /B python src/app.py" 
 	cd $(SRC_DIR) && $(PYTHON) -m unittest $(TEST_FILE)
 
 # Iniciar la base de datos (por ejemplo, creando tablas necesarias)
