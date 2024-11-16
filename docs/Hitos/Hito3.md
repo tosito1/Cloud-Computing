@@ -20,15 +20,6 @@ En el desarrollo del proyecto **Paquito Flores**, se ha optado por continuar uti
 
 ---
 
-#### 📚 **Documentación y Comunidad**
-- Flask cuenta con una de las comunidades más grandes y activas en el ecosistema Python. Esto garantiza:
-  - **Documentación extensa** y bien estructurada.
-  - Una amplia variedad de recursos como tutoriales, foros y ejemplos de código.
-  - Soluciones rápidas para problemas comunes a través de plataformas como Stack Overflow y GitHub.
-- Esta comunidad activa asegura que el framework seguirá siendo mantenido y mejorado en el futuro.
-
----
-
 #### ⚙️ **Compatibilidad con el Proyecto**
 - La lógica de negocio de **Paquito Flores** se adapta perfectamente al diseño modular que Flask promueve. La separación entre la lógica de negocio y la lógica de las rutas (API) se puede implementar de manera sencilla, cumpliendo con los requisitos del diseño por capas.
 - Flask permite una integración directa con las herramientas de prueba utilizadas en hitos anteriores, como **unittest**, garantizando una transición fluida hacia los nuevos tests que se implementarán en este hito.
