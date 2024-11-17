@@ -219,6 +219,7 @@
         
 
         <!-- Formulario para añadir una nueva votación (solo para presidentes) -->
+        {% if session['user_role'] in ['presidente', 'administrador'] %}
         <div th:if="${current_user.role == 'presidente'}" class="form-container mx-auto" style="max-width: 600px;">
             <h5 class="card-title">Crear Nueva Votación</h5>
             <form th:action="@{/votaciones}" method="post">
@@ -233,8 +234,7 @@
                 <button type="submit" class="btn btn-custom w-100">Añadir Votación</button>
             </form>
         </div>
-
-        
+        {% endif %}
 
         <!-- Mostrar las votaciones existentes -->
 <div class="votaciones-container form-container mx-auto">
