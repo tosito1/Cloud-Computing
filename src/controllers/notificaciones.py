@@ -1,7 +1,6 @@
 import datetime
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from controllers.auth import login_requerido
-from controllers.usuarios import obtener_usuario_por_id 
 
 notificaciones_bp = Blueprint('notificaciones', __name__)
 
@@ -14,7 +13,7 @@ from services.notification_service import (
     actualizar_notificacion_service
 )
 from controllers.auth import login_requerido
-from services.user_service import obtener_usuario_por_id
+from services.user_service import obtener_usuario_id_service
 
 # Definimos el Blueprint para las notificaciones
 notificaciones_bp = Blueprint('notificaciones', __name__)
@@ -24,7 +23,7 @@ notificaciones_bp = Blueprint('notificaciones', __name__)
 @login_requerido
 def notificaciones():
     user_id = session.get('user_id')
-    usuario_actual = obtener_usuario_por_id(user_id)  # Obtener los datos del usuario actual
+    usuario_actual = obtener_usuario_id_service(user_id)  # Obtener los datos del usuario actual
 
     if request.method == 'POST':
         titulo = request.form['titulo']

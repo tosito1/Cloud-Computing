@@ -6,6 +6,9 @@ from services.dinero_service import (
     obtener_cuota_por_id_service,
     #actualizar_cuota
 )
+from services.user_service import (
+    obtener_usuarios_service
+)
 from controllers.auth import login_requerido
 
 dinero_bp = Blueprint('dinero', __name__, url_prefix='/dinero')
@@ -17,26 +20,26 @@ def cuotas():
         # Verifica si la solicitud es JSON o un formulario
         if request.is_json:
             data = request.get_json()
-            monto = data.get('monto')
-            descripcion = data.get('descripcion')
+            dinero = data.get('amount')
+            nombre_cuota = data.get('quota_name')
         else:
-            monto = request.form['monto']
-            descripcion = request.form['descripcion']
+            dinero = request.form['amount']
+            nombre_cuota = request.form['quota_name']
 
         # Lógica para insertar una nueva cuota
-        insertar_cuota_service(monto, descripcion)
+        insertar_cuota_service(dinero, nombre_cuota)
         flash('Cuota creada con éxito')
 
         if request.is_json:
             return jsonify({"message": "Cuota creada con éxito"}), 201
         else:
             return redirect(url_for('dinero.cuotas'))
-
+    usuarios = obtener_usuarios_service()
     cuotas = obtener_cuotas_service()
     if request.is_json:
         return jsonify(cuotas), 200
     else:
-        return render_template('dinero.html', cuotas=cuotas)
+        return render_template('dinero.html', cuotas=cuotas, usuarios=usuarios)
 
 @dinero_bp.route('/<int:cuota_id>/eliminar', methods=['POST'])
 @login_requerido
@@ -57,11 +60,11 @@ def editar_cuota(cuota_id):
         # Verifica si la solicitud es JSON o un formulario
         if request.is_json:
             data = request.get_json()
-            monto = data.get('monto')
-            descripcion = data.get('descripcion')
+            dinero = data.get('amount')
+            nombre_cuota = data.get('quota_name')
         else:
-            monto = request.form['monto']
-            descripcion = request.form['descripcion']
+            dinero = request.form['amount']
+            nombre_cuota = request.form['quota_name']
 
         # Lógica para actualizar la cuota
         #actualizar_cuota_service(cuota_id, monto, descripcion)

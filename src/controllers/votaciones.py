@@ -6,7 +6,7 @@ from services.voting_service import (
     actualizar_votacion_service,
     registrar_voto_service
 )
-from services.user_service import obtener_usuario_por_id
+from services.user_service import obtener_usuario_id_service
 from controllers.auth import login_requerido
 
 # Definimos el Blueprint para las votaciones
@@ -17,7 +17,7 @@ votaciones_bp = Blueprint('votaciones', __name__)
 @login_requerido
 def votaciones():
     user_id = session.get('user_id')
-    usuario_actual = obtener_usuario_por_id(user_id)  # Obtener los datos del usuario actual
+    usuario_actual = obtener_usuario_id_service(user_id)  # Obtener los datos del usuario actual
 
     if request.method == 'POST':
         titulo = request.form['titulo']

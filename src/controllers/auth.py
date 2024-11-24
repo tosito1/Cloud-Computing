@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash, jsonify
 from functools import wraps
 from services.auth_service import (
-    obtener_usuario_por_nombre,
     verificar_contrasena
 )
+from services.user_service import obtener_usuario_username_service
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -29,7 +29,7 @@ def login():
             username = request.form['username']
             password = request.form['password']
 
-        user = obtener_usuario_por_nombre(username)
+        user = obtener_usuario_username_service(username)
         if user:
             # Convirtiendo el hash almacenado a bytes
             hashed_password = user['password'].encode('utf-8') if isinstance(user['password'], str) else user['password']

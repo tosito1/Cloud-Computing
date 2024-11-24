@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from services.user_service import (
     insertar_usuario_service,
+    obtener_usuario_id_service,
     obtener_usuarios_service,
     eliminar_usuario_service,
-    obtener_usuario_por_id,
     actualizar_usuario_service
 )
 from controllers.auth import login_requerido
@@ -19,12 +19,13 @@ def usuarios():
             data = request.get_json()
             username = data.get('username')
             password = data.get('password')
+            role = data.get('role')
         else:
             username = request.form['username']
             password = request.form['password']
             role = request.form['role']
         # Lógica para insertar un usuario
-        insertar_usuario_service(username, password,role)
+        insertar_usuario_service(username, password, role)
         flash('Usuario creado con éxito')
 
         if request.is_json:
@@ -38,10 +39,10 @@ def usuarios():
     else:
         return render_template('register.html')
 
-@usuarios_bp.route('/<int:user_id>/eliminar', methods=['POST'])
+@usuarios_bp.route('/<string:username>', methods=['DELETE'])
 @login_requerido
-def eliminar_usuario_route(user_id):
-    eliminar_usuario_service(user_id)  # Lógica para eliminar un usuario
+def eliminar_usuario_route(username):
+    eliminar_usuario_service(username)  # Lógica para eliminar un usuario
     flash('Usuario eliminado con éxito')
 
     if request.is_json:
@@ -52,7 +53,7 @@ def eliminar_usuario_route(user_id):
 @usuarios_bp.route('/<int:user_id>/editar', methods=['GET', 'POST'])
 @login_requerido
 def editar_usuario(user_id):
-    usuario = obtener_usuario_por_id(user_id)
+    usuario = obtener_usuario_id_service(user_id)
     if request.method == 'POST':
         # Verifica si la solicitud es JSON o un formulario
         if request.is_json:

@@ -4,6 +4,8 @@ from dbs.db_interface import conectar, cerrar
 
 # Crear Cuota
 def insertar_cuota(user_id, quota_name, amount, path_db = 'Paquito Flores.db',fine_amount=None):
+    if user_id is None or not quota_name or amount <= 0:
+        raise ValueError(Fore.RED + "Datos inválidos para insertar cuota.")
     conn = conectar(path_db)
     if conn:
         try:

@@ -35,7 +35,7 @@ def obtener_usuarios():
             cerrar(conn)  # Asegúrate de cerrar la conexión
 
 
-def obtener_usuario_por_id(user_id):
+def obtener_usuario_id(user_id):
     conn = conectar('Paquito Flores.db')
     if conn:
         try:
@@ -48,7 +48,7 @@ def obtener_usuario_por_id(user_id):
         finally:
             cerrar(conn)
 
-def obtener_usuario_por_nombre(username, path_db='Paquito Flores.db'):
+def obtener_usuario_nombre(username, path_db='Paquito Flores.db'):
     conn = conectar(path_db)
     if conn:
         try:
@@ -85,12 +85,12 @@ def actualizar_usuario(user_id, username, password, role):
             cerrar(conn)
 
 # Eliminar
-def eliminar_usuario(user_id):
+def eliminar_usuario(id_user):
     conn = conectar('Paquito Flores.db')
     if conn:
         try:
             cursor = conn.cursor()
-            cursor.execute('DELETE FROM users WHERE id = ?', (user_id,))
+            cursor.execute('DELETE FROM users WHERE id = ?', (id_user,))
             conn.commit()
         except Exception as e:
             print(Fore.RED + f"Error al eliminar usuario: {e}")
