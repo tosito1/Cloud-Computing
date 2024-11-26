@@ -54,53 +54,67 @@ class TestEndpointUsuarios(unittest.TestCase):
         print(Fore.GREEN + "DELETE /usuarios correcto")
 
 
-# class TestEndpointDinero(unittest.TestCase):
+class TestEndpointCuotas(unittest.TestCase):
+    base_url = "http://127.0.0.1:5000/dinero"
+    admin_username = "admin"
+    admin_password = "admin"
+    session_cookies = None
 
-#     def setUp(self):
-#         self.base_url = "http://127.0.0.1:5000/dinero"
+    def setUp(self):
+        # Autenticar al usuario 'admin' y almacenar las cookies de la sesión
+        login_data = {
+            "username": self.admin_username,
+            "password": self.admin_password
+        }
+        response = requests.post(f"{self.base_url.replace('/dinero', '')}/auth/login", json=login_data)
+        self.assertEqual(response.status_code, 200, "La autenticación de admin falló")
+        self.session_cookies = response.cookies
 
-#     def test_get_cuotas(self):
-#         # Realiza una solicitud GET al endpoint de cuotas
-#         response = requests.get(self.base_url)
-        
-#         # Verificar que el código de estado sea 200
-#         self.assertEqual(response.status_code, 200)
+    def test_get_cuotas(self):
+        # Verificar si se obtienen las cuotas
+        response = requests.get(f"{self.base_url}/", cookies=self.session_cookies, headers={"Accept": "application/json"})
+        self.assertEqual(response.status_code, 200)
+        print(Fore.GREEN + "GET /dinero correcto")
 
-#         # Verificar que el contenido sea JSON válido (si aplica)
-#         self.assertTrue(response.headers["Content-Type"].startswith("application/json"))
-#         print(Fore.GREEN + "GET /dinero correcto")
+    # def test_post_cuota(self):
+    #     # Crear una nueva cuota
+    #     data = {
+    #         "amount": 50.0,
+    #         "quota_name": "Cuota de prueba",
+    #         "user_id": 1
+    #     }
+    #     response = requests.post(f"{self.base_url}/", cookies=self.session_cookies, json=data)
+    #     self.assertEqual(response.status_code, 201)
+    #     print(Fore.GREEN + "POST /dinero/ correcto")
 
-#     def test_post_cuotas(self):
-#         # Datos de prueba para crear una nueva cuota
-#         data = {
-#             "monto": 150.0,
-#             "descripcion": "Test cuota"
-#         }
+    def test_delete_cuota(self):
+        # Crear una cuota de prueba para eliminar
+        data = {"amount": 100, "quota_name": "Cuota a eliminar","user_id": 1}
+        create_response = requests.post(f"{self.base_url}/", cookies=self.session_cookies, json=data)
+        self.assertEqual(create_response.status_code, 201, "Error al crear una cuota para eliminar")
+        print(Fore.GREEN + "POST /dinero/ correcto")
 
-#         response = requests.post(self.base_url, json=data)
+        # Obtener las cuotas para encontrar la creada
+        # get_response = requests.get(f"{self.base_url}/", cookies=self.session_cookies, headers={"Accept": "application/json"})
+        # self.assertEqual(get_response.status_code, 200, "Error al obtener las cuotas")
 
-#         # Verificar que el código de estado sea 201 (creado)
-#         self.assertEqual(response.status_code, 201)
+        get_response = requests.get(
+            f"{self.base_url}",
+            cookies=self.session_cookies,
+            headers={"Accept": "application/json"}
+        )
+        self.assertEqual(get_response.status_code, 200)
+        cuotas = get_response.json()
+        self.assertTrue(len(cuotas) > 0, "No hay cuotas disponibles para eliminar")
 
-#         # Verificar respuesta JSON
-#         self.assertIn("message", response.json())
-#         print(Fore.GREEN + "POST /dinero correcto")
+        # # Obtener el ID de la última cuota (ajustar según el formato de respuesta)
+        cuota_id = cuotas[-1][0]  # Suponiendo que el ID es el primer elemento de cada lista
+        self.assertIsInstance(cuota_id, int, "El ID de la cuota no es un entero")
 
-#     def test_post_cuotas_invalidas(self):
-#         # Datos inválidos
-#         data = {
-#             "monto": -50.0,  # Monto negativo no válido
-#             "descripcion": ""
-#         }
-
-#         response = requests.post(self.base_url, json=data)
-
-#         # Verificar que el código de estado sea 400 (solicitud incorrecta)
-#         self.assertEqual(response.status_code, 400)
-
-#         # Verificar respuesta JSON
-#         self.assertIn("error", response.json())
-#         print(Fore.RED + "POST /dinero inválido detectado correctamente")
+        # # Eliminar la cuota
+        delete_response = requests.post(f"{self.base_url}/{cuota_id}/eliminar", cookies=self.session_cookies)
+        self.assertEqual(delete_response.status_code, 200, "Error al eliminar la cuota")
+        print(Fore.GREEN + "DELETE /dinero correcto")
 
 
 # class TestEndpointVotaciones(unittest.TestCase):

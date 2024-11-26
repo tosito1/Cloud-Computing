@@ -7,8 +7,8 @@ from dbs.db_money import (
 )
 
 # Inserta una nueva cuota o multa
-def insertar_cuota_service(monto, descripcion, fecha_vencimiento, user_id):
-    return insertar_cuota(monto, descripcion, fecha_vencimiento, user_id)
+def insertar_cuota_service(user_id, nombre_cuota, dinero):
+    return insertar_cuota(user_id, nombre_cuota, dinero)
 
 # Obtiene todas las cuotas o multas
 def obtener_cuotas_service():

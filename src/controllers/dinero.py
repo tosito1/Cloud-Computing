@@ -17,26 +17,40 @@ dinero_bp = Blueprint('dinero', __name__, url_prefix='/dinero')
 @login_requerido
 def cuotas():
     if request.method == 'POST':
-        # Verifica si la solicitud es JSON o un formulario
-        if request.is_json:
-            data = request.get_json()
-            dinero = data.get('amount')
-            nombre_cuota = data.get('quota_name')
-        else:
-            dinero = request.form['amount']
-            nombre_cuota = request.form['quota_name']
+        try:
+            # Verifica si la solicitud es JSON o un formulario
+            if request.is_json:
+                data = request.get_json()
+                dinero = data.get('amount')
+                nombre_cuota = data.get('quota_name')
+                user_id = data.get('user_id')
+            else:
+                dinero = request.form['amount']
+                nombre_cuota = request.form['quota_name']
+                user_id = request.form['user_id']
 
-        # Lógica para insertar una nueva cuota
-        insertar_cuota_service(dinero, nombre_cuota)
-        flash('Cuota creada con éxito')
+            # Validar el monto de dinero
+            dinero = float(dinero)  # Convertir a float
+            if dinero <= 0:
+                raise ValueError("El monto debe ser positivo")
 
-        if request.is_json:
-            return jsonify({"message": "Cuota creada con éxito"}), 201
-        else:
+            # Lógica para insertar una nueva cuota
+            insertar_cuota_service(user_id, nombre_cuota, dinero)
+            flash('Cuota creada con éxito')
+
+            if request.is_json:
+                return jsonify({"message": "Cuota creada con éxito"}), 201
+            else:
+                return redirect(url_for('dinero.cuotas'))
+
+        except ValueError as e:
+            flash(str(e), 'error')
             return redirect(url_for('dinero.cuotas'))
+
+    # Obtener cuotas y usuarios
     usuarios = obtener_usuarios_service()
     cuotas = obtener_cuotas_service()
-    if request.is_json:
+    if request.headers.get("Accept") == "application/json":
         return jsonify(cuotas), 200
     else:
         return render_template('dinero.html', cuotas=cuotas, usuarios=usuarios)
