@@ -147,40 +147,63 @@ class TestEndpointUsuarios(unittest.TestCase):
 #         print(Fore.RED + "POST /votaciones inválido detectado correctamente")
 
 
-# class TestEndpointNotificaciones(unittest.TestCase):
+class TestEndpointNotificaciones(unittest.TestCase):
+    base_url = "http://127.0.0.1:5000"
+    admin_username = "admin"
+    admin_password = "admin"
+    session_cookies = None
 
-#     def setUp(self):
-#         self.base_url = "http://127.0.0.1:5000/notificaciones"
+    def setUp(self):
+        # Autenticar al usuario 'admin' y almacenar las cookies de la sesión
+        login_data = {
+            "username": self.admin_username,
+            "password": self.admin_password
+        }
+        response = requests.post(f"{self.base_url}/auth/login", json=login_data)
+        self.assertEqual(response.status_code, 200, "La autenticación de admin falló")
+        self.session_cookies = response.cookies
 
-#     def test_get_notificaciones(self):
-#         response = requests.get(self.base_url)
+    def test_get_notificaciones(self):
+        # Verificar si se obtienen las notificaciones
+        response = requests.get(f"{self.base_url}/notificaciones", cookies=self.session_cookies, headers={"Accept": "application/json"})
+        self.assertEqual(response.status_code, 200)
+        notificaciones = response.json()
+        self.assertTrue(isinstance(notificaciones, list))
+        print(Fore.GREEN + "GET /notificaciones correcto")
 
-#         self.assertEqual(response.status_code, 200)
-#         self.assertTrue(response.headers["Content-Type"].startswith("application/json"))
-#         print(Fore.GREEN + "GET /notificaciones correcto")
+    def test_post_notificacion(self):
+        # Crear una nueva notificación
+        data = {"titulo": "Nueva Notificación", "texto": "Texto de prueba"}
+        response = requests.post(f"{self.base_url}/notificaciones", cookies=self.session_cookies, data=data)
+        self.assertEqual(response.status_code, 200)
+        print(Fore.GREEN + "POST /notificaciones correcto")
 
-#     def test_post_notificacion(self):
-#         data = {
-#             "titulo": "Título prueba",
-#             "mensaje": "Mensaje de prueba",
-#             "usuario_id": 1
-#         }
+    def test_delete_notificacion(self):
+        # Obtener la lista de notificaciones
+        get_response = requests.get(
+            f"{self.base_url}/notificaciones",
+            cookies=self.session_cookies,
+            headers={"Accept": "application/json"}
+        )
+        self.assertEqual(get_response.status_code, 200)
 
-#         response = requests.post(self.base_url, json=data)
+        # Imprimir la respuesta para depuración
+        notificaciones = get_response.json()
+        #print("Respuesta del servidor:", notificaciones)
 
-#         self.assertEqual(response.status_code, 201)
-#         self.assertIn("message", response.json())
-#         print(Fore.GREEN + "POST /notificaciones correcto")
+        # Asegurarse de que la respuesta sea una lista válida
+        self.assertTrue(isinstance(notificaciones, list), "La respuesta no es una lista")
+        self.assertGreater(len(notificaciones), 0, "No hay notificaciones disponibles para eliminar")
 
-#     def test_post_notificacion_invalida(self):
-#         data = {
-#             "titulo": "",
-#             "mensaje": "",
-#             "usuario_id": None  # Usuario no válido
-#         }
+        # Obtener el ID de la última notificación (ajustando para listas)
+        notificacion_id = notificaciones[-1][0]  # Suponiendo que el ID es el primer elemento de la lista interna
+        self.assertIsInstance(notificacion_id, int, "El ID de la notificación no es un entero")
 
-#         response = requests.post(self.base_url, json=data)
+        # Eliminar la notificación
+        delete_response = requests.post(
+            f"{self.base_url}/notificaciones/{notificacion_id}/eliminar",
+            cookies=self.session_cookies
+        )
+        self.assertEqual(delete_response.status_code, 200)
 
-#         self.assertEqual(response.status_code, 400)
-#         self.assertIn("error", response.json())
-#         print(Fore.RED + "POST /notificaciones inválido detectado correctamente")
+        print(Fore.GREEN + "DELETE /notificaciones correcto")
