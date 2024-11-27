@@ -139,3 +139,33 @@
 2024-11-27 21:57:16,425 - werkzeug - INFO -  * Detected change in 'C:\\Users\\anton\\Desktop\\UGR\\CC\\Practicas\\src\\controllers\\index.py', reloading
 2024-11-27 21:57:16,474 - werkzeug - INFO -  * Restarting with stat
 2024-11-27 21:57:16,723 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 22:00:02,137 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 22:00:02,352 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 22:00:02,609 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 22:00:04,315 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 22:00:04,409 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 22:00:05,089 - app - INFO - Iniciando la aplicación Flask...
+2024-11-27 22:00:05,209 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 22:00:05,247 - werkzeug - INFO -  * Debugger PIN: 941-944-494
+2024-11-27 22:00:06,219 - app - INFO - Iniciando la aplicación Flask...
+2024-11-27 22:00:06,224 - app - INFO - Iniciando la aplicación Flask...
+2024-11-27 22:00:06,346 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 22:00:06,378 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 22:00:06,389 - werkzeug - INFO -  * Debugger PIN: 941-944-494
+2024-11-27 22:00:06,395 - werkzeug - INFO -  * Debugger PIN: 941-944-494
+2024-11-27 22:00:07,185 - app - INFO - Iniciando la aplicación Flask...
+2024-11-27 22:00:07,242 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 22:00:07,257 - werkzeug - INFO -  * Debugger PIN: 941-944-494
+2024-11-27 22:00:07,522 - app - INFO - Iniciando la aplicación Flask...
+2024-11-27 22:00:07,589 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 22:00:07,611 - werkzeug - INFO -  * Debugger PIN: 941-944-494
+2024-11-27 22:00:14,924 - werkzeug - INFO -  * Detected change in 'C:\\Users\\anton\\Desktop\\UGR\\CC\\Practicas\\src\\controllers\\usuarios.py', reloading
+2024-11-27 22:00:15,118 - werkzeug - INFO -  * Detected change in 'C:\\Users\\anton\\Desktop\\UGR\\CC\\Practicas\\src\\controllers\\notificaciones.py', reloading
+2024-11-27 22:00:15,139 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 22:00:15,319 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 22:00:15,728 - werkzeug - INFO -  * Detected change in 'C:\\Users\\anton\\Desktop\\UGR\\CC\\Practicas\\src\\controllers\\notificaciones.py', reloading
+2024-11-27 22:00:15,957 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 22:00:16,084 - werkzeug - INFO -  * Detected change in 'C:\\Users\\anton\\Desktop\\UGR\\CC\\Practicas\\src\\controllers\\votaciones.py', reloading
+2024-11-27 22:00:16,427 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 22:00:17,149 - werkzeug - INFO -  * Detected change in 'C:\\Users\\anton\\Desktop\\UGR\\CC\\Practicas\\src\\dbs\\db_user.py', reloading
+2024-11-27 22:00:17,378 - werkzeug - INFO -  * Restarting with stat
