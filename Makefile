@@ -2,7 +2,7 @@
 PYTHON = python
 PIP = $(PYTHON) -m pip
 SRC_DIR = src
-TEST_FILE = dbs/test_app.py
+TEST_FILE = tests/test_app.py
 
 # Tareas principales
 
@@ -13,11 +13,11 @@ install:
 # Ejecutar los tests en el directorio src
 test:
 	cmd /c "start /B python src/app.py" 
-	cd $(SRC_DIR) && $(PYTHON) -m unittest $(TEST_FILE)
+	cd $(SRC_DIR) && python -m unittest .\tests\test_db.py && python -m unittest .\tests\test_endpoint.py
 
 # Iniciar la base de datos (por ejemplo, creando tablas necesarias)
 db-init:
-	$(PYTHON) $(SRC_DIR)/dbs/db_interface.py
+	$(PYTHON) $(SRC_DIR)/dbs/interface2.py
 
 
 # Ejecutar el servidor en modo de desarrollo

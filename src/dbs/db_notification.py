@@ -6,9 +6,10 @@ from dbs.db_interface import conectar, cerrar
 # Crear
 def insertar_notificacion(titulo, mensaje, presidente_id, fecha_actual, path_db = 'Paquito Flores.db'):
     # Validación de entradas
+    if not isinstance(fecha_actual, datetime.datetime):
+        raise TypeError(Fore.RED + "La fecha debe ser un objeto datetime válido.")
     if not titulo or not mensaje or not presidente_id:
-        print(Fore.YELLOW + "Título, mensaje y presidente_id son obligatorios.")
-        return
+        raise TypeError(Fore.RED + "Título, mensaje y presidente_id son obligatorios.")
 
     conn = conectar(path_db)
     if conn:

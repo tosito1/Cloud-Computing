@@ -4,6 +4,8 @@ from dbs.db_interface import conectar, cerrar
 
 # Crear Cuota
 def insertar_cuota(user_id, quota_name, amount, path_db = 'Paquito Flores.db',fine_amount=None):
+    if user_id is None or not quota_name or amount <= 0:
+        raise ValueError(Fore.RED + "Datos inválidos para insertar cuota.")
     conn = conectar(path_db)
     if conn:
         try:
@@ -34,6 +36,25 @@ def insertar_cuota(user_id, quota_name, amount, path_db = 'Paquito Flores.db',fi
             cerrar(conn)
     return False
 
+# Leer Cuota por ID
+def obtener_cuota_por_id(cuota_id, path_db = 'Paquito Flores.db'):
+    conn = conectar(path_db)
+    if conn:
+        try:
+            cursor = conn.cursor()
+            # Ejecuta la consulta para obtener la cuota por su ID
+            cursor.execute('SELECT * FROM cuotas WHERE id = ?', (cuota_id,))
+            cuota = cursor.fetchone()  # Esto devuelve solo una fila
+            if cuota:
+                print(Fore.YELLOW + "Cuota obtenida correctamente.")
+            else:
+                print(Fore.YELLOW + f"No se encontró la cuota con el ID {cuota_id}.")
+            return cuota  # Devuelve la cuota si se encuentra, de lo contrario None
+        except Exception as e:
+            print(Fore.RED + f"Error al obtener la cuota: {e}")
+        finally:
+            cerrar(conn)
+    return None
 
 
 # Crear Multa

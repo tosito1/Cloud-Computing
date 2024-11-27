@@ -5,5 +5,3 @@ pytest
 flake8
 colorama
 requests
-flask
-SQLAlchemy
