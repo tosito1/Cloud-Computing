@@ -1,47 +1,95 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
-from dbs.db_money import insertar_cuota, obtener_cuotas, insertar_multa, obtener_multas
+from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
+from services.dinero_service import (
+    insertar_cuota_service,
+    obtener_cuotas_service,
+    eliminar_cuota_service,
+    obtener_cuota_por_id_service,
+    #actualizar_cuota
+)
+from services.user_service import (
+    obtener_usuarios_service
+)
 from controllers.auth import login_requerido
-from dbs.db_user import obtener_usuarios
 
-dinero_bp = Blueprint('dinero', __name__)
+dinero_bp = Blueprint('dinero', __name__, url_prefix='/dinero')
 
-@dinero_bp.route('/dinero', methods=['GET', 'POST'])
+@dinero_bp.route('/', methods=['GET', 'POST'])
 @login_requerido
-def dinero():
+def cuotas():
     if request.method == 'POST':
-        user_id = request.form['user_id']
-        amount = request.form['amount']
-        quota_name = request.form['quota_name']  # Nombre de la cuota
-        fine_amount = request.form.get('multa_amount')  # Monto de la multa (opcional)
+        try:
+            # Verifica si la solicitud es JSON o un formulario
+            if request.is_json:
+                data = request.get_json()
+                dinero = data.get('amount')
+                nombre_cuota = data.get('quota_name')
+                user_id = data.get('user_id')
+            else:
+                dinero = request.form['amount']
+                nombre_cuota = request.form['quota_name']
+                user_id = request.form['user_id']
 
-        # Llama a insertar_cuota y pasa todos los parámetros necesarios
-        if insertar_cuota(user_id, quota_name, amount, fine_amount):
-            flash('Pago registrado con éxito.')
-        else:
-            flash('Error al registrar el pago.')
-        return redirect(url_for('dinero.dinero'))
+            # Validar el monto de dinero
+            dinero = float(dinero)  # Convertir a float
+            if dinero <= 0:
+                raise ValueError("El monto debe ser positivo")
 
-    # Obtener las cuotas y multas para mostrarlas en el formulario
-    cuotas = obtener_cuotas()
-    multas = obtener_multas()
-    usuarios = obtener_usuarios()  # Función que recupera todos los usuarios
-    return render_template('dinero.html', cuotas=cuotas, multas=multas, usuarios=usuarios)
+            # Lógica para insertar una nueva cuota
+            insertar_cuota_service(user_id, nombre_cuota, dinero)
+            flash('Cuota creada con éxito')
 
-# @dinero_bp.route('/dinero/cuota/<int:cuota_id>/editar', methods=['GET', 'POST'])
-# @login_requerido
-# def editar_cuota(cuota_id):
-#     cuota = obtener_cuota_por_id(cuota_id)
-#     if request.method == 'POST':
-#         monto = request.form['monto']
-#         actualizar_cuota(cuota_id, monto)
-#         flash('Cuota actualizada con éxito')
-#         return redirect(url_for('dinero.dinero'))
-#     return render_template('editar_cuota.html', cuota=cuota)
+            if request.is_json:
+                return jsonify({"message": "Cuota creada con éxito"}), 201
+            else:
+                return redirect(url_for('dinero.cuotas'))
 
-@dinero_bp.route('/dinero/multa', methods=['POST'])
+        except ValueError as e:
+            flash(str(e), 'error')
+            return redirect(url_for('dinero.cuotas'))
+
+    # Obtener cuotas y usuarios
+    usuarios = obtener_usuarios_service()
+    cuotas = obtener_cuotas_service()
+    if request.headers.get("Accept") == "application/json":
+        return jsonify(cuotas), 200
+    else:
+        return render_template('dinero.html', cuotas=cuotas, usuarios=usuarios)
+
+@dinero_bp.route('/<int:cuota_id>/eliminar', methods=['POST'])
 @login_requerido
-def agregar_multa():
-    monto = request.form['monto']
-    insertar_multa(monto)
-    flash('Multa creada con éxito')
-    return redirect(url_for('dinero.dinero'))
+def eliminar_cuota_route(cuota_id):
+    eliminar_cuota_service(cuota_id)  # Lógica para eliminar una cuota
+    flash('Cuota eliminada con éxito')
+
+    if request.is_json:
+        return jsonify({"message": "Cuota eliminada con éxito"}), 200
+    else:
+        return redirect(url_for('dinero.cuotas'))
+
+@dinero_bp.route('/<int:cuota_id>/editar', methods=['GET', 'POST'])
+@login_requerido
+def editar_cuota(cuota_id):
+    cuota = obtener_cuota_por_id_service(cuota_id)
+    if request.method == 'POST':
+        # Verifica si la solicitud es JSON o un formulario
+        if request.is_json:
+            data = request.get_json()
+            dinero = data.get('amount')
+            nombre_cuota = data.get('quota_name')
+        else:
+            dinero = request.form['amount']
+            nombre_cuota = request.form['quota_name']
+
+        # Lógica para actualizar la cuota
+        #actualizar_cuota_service(cuota_id, monto, descripcion)
+        flash('Cuota actualizada con éxito')
+
+        if request.is_json:
+            return jsonify({"message": "Cuota actualizada con éxito"}), 200
+        else:
+            return redirect(url_for('dinero.cuotas'))
+
+    if request.is_json:
+        return jsonify(cuota), 200
+    else:
+        return render_template('editar_cuota.html', cuota=cuota)

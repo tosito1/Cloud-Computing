@@ -3,6 +3,9 @@ from dbs.db_interface import Voting, conectar, cerrar
 
 # Crear Votación
 def insertar_votacion(titulo, opciones_str, path_db = 'Paquito Flores.db'):
+    if not opciones_str.strip():
+        raise ValueError(Fore.RED + "Debe proporcionar al menos una opción para la votación.")
+
     conn = conectar(path_db)
     if conn:
         try:
