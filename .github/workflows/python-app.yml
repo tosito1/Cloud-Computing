@@ -1,4 +1,4 @@
-name: CI
+name: Hito 3
 
 on:
   push:
@@ -44,7 +44,7 @@ jobs:
 
       - name: Run Unit tests
         run: |
-          #cd src
+          cd src
           python -m unittest ./tests/test_app.py
           python -m unittest ./tests/test_endpoint.py
 
