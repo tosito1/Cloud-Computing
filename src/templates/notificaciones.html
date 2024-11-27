@@ -172,7 +172,7 @@
             }
         }
         
-        .button {
+.button {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -188,7 +188,7 @@
   transition-duration: 0.3s;
   overflow: hidden;
   position: relative;
-  gap: 1px;
+  gap: 2px;
 }
 
 .svgIcon {
@@ -201,43 +201,19 @@
 }
 
 .button:hover {
-  width: 140px;
-  border-radius: 50px;
   transition-duration: 0.3s;
-  background-color: rgb(255, 69, 69);
+  background-color: #ff0000;
   align-items: center;
   gap: 0;
 }
 
-.button:hover .bin-bottom {
-  width: 50px;
-  transition-duration: 0.3s;
-  transform: translateY(60%);
-}
 .bin-top {
   transform-origin: bottom right;
 }
 .button:hover .bin-top {
-  width: 50px;
-  transition-duration: 0.3s;
-  transform: translateY(60%) rotate(160deg);
+  transition-duration: 0.5s;
+  transform: rotate(160deg);
 }
-.button::before {
-  position: absolute;
-  top: -20px;
-  content: "Delete";
-  color: white;
-  transition-duration: 0.3s;
-  font-size: 2px;
-}
-
-.button:hover::before {
-  font-size: 13px;
-  opacity: 1;
-  transform: translateY(35px);
-  transition-duration: 0.3s;
-}
-
 .button_add {
   position: relative;
   width: 200px; /* Aumentamos el ancho para hacerlo más largo */

@@ -117,48 +117,102 @@ class TestEndpointCuotas(unittest.TestCase):
         print(Fore.GREEN + "DELETE /dinero correcto")
 
 
-# class TestEndpointVotaciones(unittest.TestCase):
+class TestEndpointVotaciones(unittest.TestCase):
+    base_url = "http://127.0.0.1:5000/votaciones"
+    admin_username = "admin"
+    admin_password = "admin"
+    session_cookies = None
 
-#     def setUp(self):
-#         self.base_url = "http://127.0.0.1:5000/votaciones"
+    def setUp(self):
+        # Autenticar al usuario 'admin' y almacenar las cookies de la sesión
+        login_data = {
+            "username": self.admin_username,
+            "password": self.admin_password
+        }
+        response = requests.post(f"{self.base_url.replace('/votaciones', '')}/auth/login", json=login_data)
+        self.assertEqual(response.status_code, 200, "La autenticación de admin falló")
+        self.session_cookies = response.cookies
 
-#     def test_get_votaciones(self):
-#         response = requests.get(self.base_url)
+    def test_get_votaciones(self):
+        response = requests.get(
+            self.base_url,
+            cookies=self.session_cookies,
+            headers={"Accept": "application/json"}
+        )
+        self.assertEqual(response.status_code, 200)
+        votaciones = response.json()
+        self.assertTrue(isinstance(votaciones, dict), "La respuesta no es un diccionario")
+        # self.assertGreater(len(votaciones), 0, "No hay votaciones disponibles")
+        print(Fore.GREEN + "GET /votaciones correcto")
 
-#         # Verificar que el código de estado sea 200
-#         self.assertEqual(response.status_code, 200)
+    def test_post_votacion(self):
+        data = {"titulo": "Nueva Votación", "opciones": "Opción 1, Opción 2"}
+        response = requests.post(self.base_url, cookies=self.session_cookies, data=data)
+        self.assertEqual(response.status_code, 200, "Error al crear la votación")
+        print(Fore.GREEN + "POST /votaciones correcto")
 
-#         # Verificar que el contenido sea JSON válido (si aplica)
-#         self.assertTrue(response.headers["Content-Type"].startswith("application/json"))
-#         print(Fore.GREEN + "GET /votaciones correcto")
+        # Obtener las votaciones para buscar la recién creada
+        get_response = requests.get(
+            self.base_url,
+            cookies=self.session_cookies,
+            headers={"Accept": "application/json"}
+        )
+        self.assertEqual(get_response.status_code, 200, "Error al obtener las votaciones para limpieza")
+        votaciones = get_response.json()
+        self.assertTrue(isinstance(votaciones, dict), "La respuesta no es un diccionario")
+        self.assertGreater(len(votaciones), 0, "No hay votaciones disponibles para eliminar")
 
-#     def test_post_votacion(self):
-#         data = {
-#             "titulo": "Test votación",
-#             "opciones": "Opción 1, Opción 2"
-#         }
+        # Obtener el ID de la última votación (suponiendo orden ascendente por clave)
+        votacion_id = max(map(int, votaciones.keys()))
+        self.assertIsInstance(votacion_id, int, "El ID de la votación no es un entero")
 
-#         response = requests.post(self.base_url, json=data)
+        delete_response = requests.post(f"{self.base_url}/{votacion_id}/eliminar", cookies=self.session_cookies)
+        self.assertEqual(delete_response.status_code, 200)
+        print(Fore.GREEN + "DELETE /votaciones correcto")
 
-#         # Verificar que el código de estado sea 201 (creado)
-#         self.assertEqual(response.status_code, 201)
 
-#         self.assertIn("message", response.json())
-#         print(Fore.GREEN + "POST /votaciones correcto")
+    # def test_editar_votacion(self):
+    #     # Crear una votación para editar
+    #     data = {"titulo": "Votación a editar", "opciones": "Opción A, Opción B"}
+    #     create_response = requests.post(self.base_url, cookies=self.session_cookies, data=data)
+    #     self.assertEqual(create_response.status_code, 200, "Error al crear la votación para editar")
 
-#     def test_post_votacion_invalida(self):
-#         data = {
-#             "titulo": "",  # Título vacío no válido
-#             "opciones": ""
-#         }
+    #     # Obtener la votación creada
+    #     get_response = requests.get(self.base_url, cookies=self.session_cookies)
+    #     self.assertEqual(get_response.status_code, 200, "Error al obtener votaciones para editar")
+    #     votaciones = get_response.json()
+    #     votacion_id = votaciones[-1]['id']  # Suponiendo que la respuesta contiene un campo 'id'
 
-#         response = requests.post(self.base_url, json=data)
+    #     # Editar la votación
+    #     update_data = {"titulo": "Votación editada", "opciones": "Opción X, Opción Y"}
+    #     update_response = requests.post(f"{self.base_url}/{votacion_id}/editar", cookies=self.session_cookies, data=update_data)
+    #     self.assertEqual(update_response.status_code, 200, "Error al editar la votación")
+    #     print(Fore.GREEN + "POST /votaciones/<id>/editar correcto")
 
-#         # Verificar que el código de estado sea 400 (solicitud incorrecta)
-#         self.assertEqual(response.status_code, 400)
+    #     # Limpiar: Eliminar la votación editada
+    #     delete_response = requests.post(f"{self.base_url}/{votacion_id}/eliminar", cookies=self.session_cookies)
+    #     self.assertEqual(delete_response.status_code, 200)
+    #     print(Fore.GREEN + "DELETE /votaciones correcto")
 
-#         self.assertIn("error", response.json())
-#         print(Fore.RED + "POST /votaciones inválido detectado correctamente")
+    # def test_votar_opcion(self):
+    #     # Crear una votación para votar
+    #     data = {"titulo": "Votación para votar", "opciones": "Opción 1, Opción 2"}
+    #     create_response = requests.post(self.base_url, cookies=self.session_cookies, data=data)
+    #     self.assertEqual(create_response.status_code, 200, "Error al crear la votación para votar")
+
+    #     # Obtener la votación creada
+    #     get_response = requests.get(self.base_url, cookies=self.session_cookies)
+    #     self.assertEqual(get_response.status_code, 200, "Error al obtener votaciones para votar")
+    #     votaciones = get_response.json()
+    #     votacion = votaciones[-1]
+    #     votacion_id = votacion['id']  # Suponiendo que la respuesta contiene un campo 'id'
+    #     opciones = votacion['opciones']  # Suponiendo que 'opciones' contiene las opciones de votación
+    #     opcion_id = opciones[0]['id']  # Suponiendo que cada opción tiene un 'id'
+
+    #     # Registrar un voto
+    #     votar_response = requests.post(f"{self.base_url}/votar/{opcion_id}", cookies=self.session_cookies)
+    #     self.assertEqual(votar_response.status_code, 200, "Error al votar en la opción")
+    #     print(Fore.GREEN + "POST /votaciones/votar/<id> correcto")
 
 
 class TestEndpointNotificaciones(unittest.TestCase):

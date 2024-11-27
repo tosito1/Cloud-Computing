@@ -1,0 +1,15 @@
+2024-11-27 21:20:32,914 - app - INFO - Iniciando la aplicación Flask...
+2024-11-27 21:20:34,417 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.18.17:5000
+2024-11-27 21:20:34,417 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 21:20:34,459 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 21:20:35,320 - app - INFO - Iniciando la aplicación Flask...
+2024-11-27 21:20:35,340 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 21:20:35,401 - werkzeug - INFO -  * Debugger PIN: 941-944-494
+2024-11-27 21:21:09,790 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:21:09] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-27 21:21:09,940 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:21:09] "GET /auth/login HTTP/1.1" 200 -
+2024-11-27 21:21:29,134 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:21:29] "[32mPOST /auth/login HTTP/1.1[0m" 302 -
+2024-11-27 21:21:29,315 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:21:29] "GET /index HTTP/1.1" 200 -
+2024-11-27 21:21:29,907 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:21:29] "[36mGET /static/img/logo.jpg HTTP/1.1[0m" 304 -

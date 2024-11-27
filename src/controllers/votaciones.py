@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash, session
+from flask import Blueprint, jsonify, render_template, redirect, url_for, request, flash, session
 from services.voting_service import (
     insertar_votacion_service,
     obtener_votaciones_service,
@@ -28,6 +28,9 @@ def votaciones():
 
     # Obtener todas las votaciones disponibles
     votaciones = obtener_votaciones_service()
+    if request.headers.get("Accept") == "application/json":
+        return jsonify(votaciones)
+
     return render_template('votaciones.html', votaciones=votaciones, current_user=usuario_actual)
 
 # Ruta para eliminar una votación
@@ -36,6 +39,11 @@ def votaciones():
 def eliminar_votacion(votacion_id):
     eliminar_votacion_service(votacion_id)  # Eliminar votación de la base de datos
     flash('Votación eliminada con éxito')
+
+    # Respuesta en JSON para los tests
+    if request.headers.get("Accept") == "application/json":
+        return jsonify({"status": "success", "message": "Votación eliminada con éxito"}), 200
+
     return redirect(url_for('votaciones.votaciones'))
 
 # Ruta para editar una votación
@@ -65,6 +73,10 @@ def votar_opcion(opcion_id):
         exito = registrar_voto_service(opcion_id, user_id)  # Intentar registrar el voto
         if exito:
             flash("Voto registrado con éxito.")
+            if request.headers.get("Accept") == "application/json":
+                return jsonify({"status": "success", "message": "Voto insertado con éxito"}), 200
         else:
+            if request.headers.get("Accept") == "application/json":
+                return jsonify({"status": "error", "message": f"Error al eliminar el Voto."}), 500
             flash("Error al registrar el voto. Es posible que ya hayas votado en esta opción.")
     return redirect(url_for('votaciones.votaciones'))
