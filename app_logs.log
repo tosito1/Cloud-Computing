@@ -13,3 +13,56 @@
 2024-11-27 21:21:29,134 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:21:29] "[32mPOST /auth/login HTTP/1.1[0m" 302 -
 2024-11-27 21:21:29,315 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:21:29] "GET /index HTTP/1.1" 200 -
 2024-11-27 21:21:29,907 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:21:29] "[36mGET /static/img/logo.jpg HTTP/1.1[0m" 304 -
+2024-11-27 21:36:46,924 - app - INFO - Iniciando la aplicación Flask...
+2024-11-27 21:36:47,813 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.18.17:5000
+2024-11-27 21:36:47,814 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 21:36:47,817 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 21:36:48,563 - app - INFO - Iniciando la aplicación Flask...
+2024-11-27 21:36:48,581 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 21:36:48,587 - werkzeug - INFO -  * Debugger PIN: 941-944-494
+2024-11-27 21:36:49,487 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:49] "[31m[1mPOST /auth/login HTTP/1.1[0m" 401 -
+2024-11-27 21:36:49,830 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:49] "POST /auth/login HTTP/1.1" 200 -
+2024-11-27 21:36:50,162 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:50] "POST /auth/login HTTP/1.1" 200 -
+2024-11-27 21:36:50,436 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:50] "[35m[1mPOST /dinero/ HTTP/1.1[0m" 201 -
+2024-11-27 21:36:50,442 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:50] "[32mGET /dinero HTTP/1.1[0m" 308 -
+2024-11-27 21:36:50,451 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:50] "GET /dinero/ HTTP/1.1" 200 -
+2024-11-27 21:36:50,664 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:50] "[32mPOST /dinero/1/eliminar HTTP/1.1[0m" 302 -
+2024-11-27 21:36:50,704 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:50] "GET /dinero/ HTTP/1.1" 200 -
+2024-11-27 21:36:51,044 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:51] "POST /auth/login HTTP/1.1" 200 -
+2024-11-27 21:36:51,052 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:51] "GET /dinero/ HTTP/1.1" 200 -
+2024-11-27 21:36:51,402 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:51] "POST /auth/login HTTP/1.1" 200 -
+2024-11-27 21:36:51,408 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:51] "GET /notificaciones HTTP/1.1" 200 -
+2024-11-27 21:36:51,508 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:51] "[32mPOST /notificaciones/2/eliminar HTTP/1.1[0m" 302 -
+2024-11-27 21:36:51,548 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:51] "GET /notificaciones HTTP/1.1" 200 -
+2024-11-27 21:36:51,883 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:51] "POST /auth/login HTTP/1.1" 200 -
+2024-11-27 21:36:51,891 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:51] "GET /notificaciones HTTP/1.1" 200 -
+2024-11-27 21:36:52,219 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:52] "POST /auth/login HTTP/1.1" 200 -
+2024-11-27 21:36:52,333 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:52] "[32mPOST /notificaciones HTTP/1.1[0m" 302 -
+2024-11-27 21:36:52,342 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:52] "GET /notificaciones HTTP/1.1" 200 -
+2024-11-27 21:36:52,347 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-27 21:36:52,355 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:52] "GET /auth/login HTTP/1.1" 200 -
+2024-11-27 21:36:52,361 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:52] "[32mPOST /usuarios HTTP/1.1[0m" 308 -
+2024-11-27 21:36:52,692 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:52] "[35m[1mPOST /usuarios/ HTTP/1.1[0m" 201 -
+2024-11-27 21:36:52,697 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:52] "[32mDELETE /usuarios/nuevo_usuario HTTP/1.1[0m" 302 -
+2024-11-27 21:36:52,703 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:52] "GET /auth/login HTTP/1.1" 200 -
+2024-11-27 21:36:53,049 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:53] "POST /auth/login HTTP/1.1" 200 -
+2024-11-27 21:36:53,058 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:53] "GET /votaciones HTTP/1.1" 200 -
+2024-11-27 21:36:53,391 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:53] "POST /auth/login HTTP/1.1" 200 -
+2024-11-27 21:36:53,577 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:53] "[32mPOST /votaciones HTTP/1.1[0m" 302 -
+2024-11-27 21:36:53,603 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:53] "GET /votaciones HTTP/1.1" 200 -
+2024-11-27 21:36:53,613 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:53] "GET /votaciones HTTP/1.1" 200 -
+2024-11-27 21:36:53,711 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:53] "[32mPOST /votaciones/2/eliminar HTTP/1.1[0m" 302 -
+2024-11-27 21:36:53,727 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 21:36:53] "GET /votaciones HTTP/1.1" 200 -
+2024-11-27 21:41:08,222 - app - INFO - Iniciando la aplicación Flask...
+2024-11-27 21:41:09,093 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.18.17:5000
+2024-11-27 21:41:09,094 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 21:41:09,096 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 21:41:09,852 - app - INFO - Iniciando la aplicación Flask...
+2024-11-27 21:41:09,872 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 21:41:09,878 - werkzeug - INFO -  * Debugger PIN: 941-944-494
