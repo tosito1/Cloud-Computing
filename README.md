@@ -40,9 +40,14 @@ El proyecto se desarrolla siguiendo una serie de hitos que dividen el trabajo en
    - Configurar marco de pruebas en el proyecto.
    - Configurar y utilizar administrador de tareas.
    
-4. **Hito 3: Diseño de microservicios**
-   
-5. **Hito 4: Composición de servicios**
+4. **[Hito 3](docs/Hitos/Hito3.md): Diseño de microservicios**
+   - Justificación Técnica del Framework Elegido para el Microservicio
+   - Configuración de la API y Rutas
+   - Implementación del Sistema de Logs
+   - Pruebas Unitarias y de Integración para la API
+   - Integración con GitHub Actions
+     
+5. **[Hito 4](docs/Hitos/Hito4.md): Composición de servicios**
 
 6. **Hito 5: Despliegue de la aplicación en un PaaS**
 
