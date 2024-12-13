@@ -1,40 +1,79 @@
-name: Build and Publish Docker Images
+name: Create and publish Docker images
 
 on:
   push:
-    branches:
-      - main
+    branches: ['release']
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME_APP: ${{ github.repository }}-app
+  IMAGE_NAME_LOGS: ${{ github.repository }}-logs
 
 jobs:
-  build-and-push:
+  build-and-push-images:
     runs-on: ubuntu-latest
-    steps:
-      # Clonar el repositorio
-      - name: Checkout code
-        uses: actions/checkout@v3
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
 
-      # Log in to GitHub Packages Docker Registry
-      - name: Log in to GitHub Container Registry
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Log in to the Container registry
+      - name: Log in to GitHub Container registry
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Construir y subir la imagen de la aplicación
-      - name: Build and push app image
+      # 3. Build and push the app image
+      - name: Extract metadata for app image
+        id: meta_app
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_APP }}
+
+      - name: Build and push app Docker image
+        id: push_app
         uses: docker/build-push-action@v4
         with:
           context: ./src/app
           push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/app:latest
+          tags: ${{ steps.meta_app.outputs.tags }}
+          labels: ${{ steps.meta_app.outputs.labels }}
 
-      # Construir y subir la imagen del servidor de logs
-      - name: Build and push logs image
+      # 4. Build and push the logs image
+      - name: Extract metadata for logs image
+        id: meta_logs
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOGS }}
+
+      - name: Build and push logs Docker image
+        id: push_logs
         uses: docker/build-push-action@v4
         with:
           context: ./src/logs
           push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/logs:latest
+          tags: ${{ steps.meta_logs.outputs.tags }}
+          labels: ${{ steps.meta_logs.outputs.labels }}
+
+      # 5. Generate artifact attestations
+      - name: Generate artifact attestation for app
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_APP }}
+          subject-digest: ${{ steps.push_app.outputs.digest }}
+          push-to-registry: true
+
+      - name: Generate artifact attestation for logs
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOGS }}
+          subject-digest: ${{ steps.push_logs.outputs.digest }}
+          push-to-registry: true
