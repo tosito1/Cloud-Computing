@@ -5,3 +5,4 @@ pytest
 flake8
 colorama
 requests
+psycopg2

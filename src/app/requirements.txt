@@ -1,0 +1,11 @@
+SQLAlchemy
+bcrypt
+pytest
+flake8
+colorama
+requests
+psycopg2
+flask
+gunicorn
+fluent-logger
+Flask-SQLAlchemy
