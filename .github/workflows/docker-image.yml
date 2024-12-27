@@ -1,0 +1,47 @@
+name: Deploy Docker Images from Docker Hub
+
+on:
+  push:
+    branches: ['release']
+
+env:
+  DOCKER_HUB_USERNAME: antonioj13  # Tu usuario de Docker Hub
+  IMAGE_NAME_APP: app
+  IMAGE_NAME_LOGS: logs
+  IMAGE_NAME_DB: db
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: "antonioj13"
+          password: "septiemvre13"
+
+      # 3. Pull the app image from Docker Hub
+      - name: Pull app Docker image
+        run: docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME_APP }}:latest
+
+      # 4. Pull the logs image from Docker Hub
+      - name: Pull logs Docker image
+        run: docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME_LOGS }}:latest
+
+      # 5. Pull the db image from Docker Hub
+      - name: Pull db Docker image
+        run: docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME_DB }}:latest
+
+      # 6. Deploy using Docker Compose
+      - name: Deploy with Docker Compose
+        run: |
+          docker-compose pull  # Descarga las imágenes necesarias
+          docker-compose up -d  # Inicia los contenedores en modo desacoplado
