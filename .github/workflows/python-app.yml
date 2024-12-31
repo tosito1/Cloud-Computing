@@ -36,15 +36,17 @@ jobs:
 
       # 3. Pull the app image from Docker Hub
       - name: Pull app Docker image
-        run: docker push antonioj13/src-appp:tagname
+        run: docker pull antonioj13/src-appp:tagname
 
       # 4. Pull the logs image from Docker Hub
       - name: Pull logs Docker image
-        run: docker push antonioj13/src-logs:tagname
+        run: docker pull antonioj13/src-logs
 
       # 5. Pull the db image from Docker Hub
       - name: Pull db Docker image
-        run: docker push antonioj13/postgres:tagname
+        run: docker pull antonioj13/postgres:tagname
 
       # 6. Deploy using Docker Compose
-     
+      - name: Deploy with Docker Compose
+        run: |
+          docker-compose up --build
