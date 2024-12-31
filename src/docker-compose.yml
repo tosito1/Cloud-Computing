@@ -34,5 +34,11 @@ services:
     volumes:
       - ./logs/output:/fluentd/log
 
+  tests:
+    build:
+      context: ./tests
+    depends_on:
+      - app
+
 volumes:
   db_data:

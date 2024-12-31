@@ -6,9 +6,9 @@ on:
 
 env:
   DOCKER_HUB_USERNAME: antonioj13  # Tu usuario de Docker Hub
-  IMAGE_NAME_APP: app
-  IMAGE_NAME_LOGS: logs
-  IMAGE_NAME_DB: db
+  IMAGE_NAME_APP: src-appp
+  IMAGE_NAME_LOGS: src-logs
+  IMAGE_NAME_DB: postgres
 
 jobs:
   deploy:
