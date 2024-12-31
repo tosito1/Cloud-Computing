@@ -47,7 +47,4 @@ jobs:
         run: docker push antonioj13/postgres:tagname
 
       # 6. Deploy using Docker Compose
-      - name: Deploy with Docker Compose
-        run: |
-          docker-compose pull  # Descarga las imágenes necesarias
-          docker-compose up -d  # Inicia los contenedores en modo desacoplado
+     
