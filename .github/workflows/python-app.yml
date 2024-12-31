@@ -28,6 +28,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # Paso 4: Instalar Docker Compose (si es necesario)
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
       # 3. Pull the app image from Docker Hub
       - name: Pull app Docker image
         run: docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME_APP }}:latest
