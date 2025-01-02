@@ -39,6 +39,9 @@ services:
       context: ./tests
     depends_on:
       - app
+      - db
+      - logs
+    network_mode: "service:app"
 
 volumes:
   db_data:

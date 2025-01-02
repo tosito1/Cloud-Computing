@@ -44,7 +44,7 @@ def login_requerido(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
-            flash('Debes iniciar sesión para acceder a esta página.')
+            app.logger.warning('Debes iniciar sesión para acceder a esta página.')
             return redirect(url_for('login'))  # Redirige al formulario de login
         return f(*args, **kwargs)
     return decorated_function
@@ -71,7 +71,7 @@ def login():
                 session['user_id'] = user.id
                 session['user_role'] = user.role
                 session['user_username'] = user.username
-                flash('Inicio de sesión exitoso.')
+                app.logger.info(f"'{user.id}'Inicio de sesión exitoso.")
                 if request.is_json:
                     return jsonify({"message": "Inicio de sesión exitoso."}), 200
                 else:
@@ -90,7 +90,7 @@ def logout():
     session.pop('user_id', None)
     session.pop('user_role', None)
     session.pop('user_username', None)
-    flash('Has cerrado sesión exitosamente.')
+    app.logger.info('Has cerrado sesión exitosamente.')
 
     if request.is_json:
         return jsonify({"message": "Sesión cerrada exitosamente."}), 200
@@ -136,7 +136,7 @@ def notificaciones():
         texto = request.form.get('texto')
 
         if not titulo or not texto:
-            flash('Título y texto son obligatorios', 'error')
+            app.logger.warning('Título y texto son obligatorios', 'error')
             return redirect(url_for('notificaciones'))
 
         try:
@@ -149,12 +149,12 @@ def notificaciones():
             )
             db.session.add(nueva_notificacion)
             db.session.commit()
-            flash('Notificación creada con éxito')
+            app.logger.info('Notificación creada con éxito')
             return redirect(url_for('notificaciones'))
         except SQLAlchemyError as e:
             db.session.rollback()
             error_msg = f"Error al crear la notificación: {str(e)}"
-            flash(error_msg, 'error')
+            app.logger.warning(error_msg)
             return redirect(url_for('notificaciones'))
 
     # Obtener todas las notificaciones, sin importar el usuario
@@ -178,14 +178,14 @@ def eliminar_notificacion(notificacion_id):
         notificacion = Notification.query.get(notificacion_id)
 
         if not notificacion or notificacion.president_id != session.get('user_id'):
-            flash('Notificación no encontrada o acceso denegado', 'error')
+            app.logger.warning('Notificación no encontrada o acceso denegado')
             if request.headers.get("Accept") == "application/json":
                 return jsonify({"status": "error", "message": "Notificación no encontrada o acceso denegado"}), 404
             return redirect(url_for('notificaciones'))
 
         db.session.delete(notificacion)
         db.session.commit()
-        flash('Notificación eliminada con éxito')
+        app.logger.info('Notificación eliminada con éxito')
 
         # Respuesta en JSON para los tests
         if request.headers.get("Accept") == "application/json":
@@ -200,7 +200,7 @@ def eliminar_notificacion(notificacion_id):
         if request.headers.get("Accept") == "application/json":
             return jsonify({"status": "error", "message": error_msg}), 500
 
-        flash(error_msg, 'error')
+        app.logger.warning(error_msg)
         return redirect(url_for('notificaciones'))
 
 @app.route('/notificaciones/<int:notificacion_id>/editar', methods=['GET', 'POST'])
@@ -209,7 +209,7 @@ def editar_notificacion(notificacion_id):
     notificacion = Notification.query.get(notificacion_id)
 
     if not notificacion or notificacion.user_id != session.get('user_id'):
-        flash('Notificación no encontrada o acceso denegado', 'error')
+        app.logger.warning('Notificación no encontrada o acceso denegado')
         if request.headers.get("Accept") == "application/json":
             return jsonify({"status": "error", "message": "Notificación no encontrada o acceso denegado"}), 404
         return redirect(url_for('notificaciones'))
@@ -219,7 +219,7 @@ def editar_notificacion(notificacion_id):
         texto = request.form.get('texto')
 
         if not titulo or not texto:
-            flash('Título y texto son obligatorios', 'error')
+            app.logger.warning('Título y texto son obligatorios')
             return redirect(url_for('notificaciones.editar_notificacion', notificacion_id=notificacion_id))
 
         try:
@@ -227,12 +227,12 @@ def editar_notificacion(notificacion_id):
             notificacion.title = titulo
             notificacion.content = texto
             db.session.commit()
-            flash('Notificación actualizada con éxito')
+            app.logger.info('Notificación actualizada con éxito')
             return redirect(url_for('notificaciones'))
         except SQLAlchemyError as e:
             db.session.rollback()
             error_msg = f"Error al actualizar la notificación: {str(e)}"
-            flash(error_msg, 'error')
+            app.logger.warning(error_msg)
             return redirect(url_for('notificaciones.editar_notificacion', notificacion_id=notificacion_id))
 
     if request.headers.get("Accept") == "application/json":
@@ -299,7 +299,7 @@ def dinero():
             db.session.add(nueva_cuota)
             db.session.commit()
 
-            flash('Cuota creada con éxito')
+            app.logger.info('Cuota creada con éxito')
             if request.is_json:
                 return jsonify({"message": "Cuota creada con éxito"}), 201
             else:
@@ -313,7 +313,7 @@ def dinero():
         except SQLAlchemyError as e:
             db.session.rollback()
             error_msg = "Error al crear la cuota: " + str(e)
-            flash(error_msg, 'error')
+            app.logger.warning(error_msg)
             if request.is_json:
                 return jsonify({"error": error_msg}), 500
             return redirect(url_for('dinero'))
@@ -333,14 +333,14 @@ def eliminar_cuota_route(cuota_id):
     try:
         cuota = Quota.query.get(cuota_id)
         if not cuota:
-            flash('Cuota no encontrada', 'error')
+            app.logger.warning('Cuota no encontrada')
             if request.is_json:
                 return jsonify({"error": "Cuota no encontrada"}), 404
             return redirect(url_for('dinero'))
 
         db.session.delete(cuota)
         db.session.commit()
-        flash('Cuota eliminada con éxito')
+        app.logger.info('Cuota eliminada con éxito')
 
         if request.is_json:
             return jsonify({"message": "Cuota eliminada con éxito"}), 200
@@ -349,7 +349,7 @@ def eliminar_cuota_route(cuota_id):
     except SQLAlchemyError as e:
         db.session.rollback()
         error_msg = "Error al eliminar la cuota: " + str(e)
-        flash(error_msg, 'error')
+        app.logger.warning(error_msg)
         if request.is_json:
             return jsonify({"error": error_msg}), 500
         return redirect(url_for('dinero'))
@@ -359,7 +359,7 @@ def eliminar_cuota_route(cuota_id):
 def editar_cuota(cuota_id):
     cuota = Quota.query.get(cuota_id)
     if not cuota:
-        flash('Cuota no encontrada', 'error')
+        app.logger.warning('Cuota no encontrada')
         if request.is_json:
             return jsonify({"error": "Cuota no encontrada"}), 404
         return redirect(url_for('dinero'))
@@ -383,7 +383,7 @@ def editar_cuota(cuota_id):
             cuota.amount = dinero
             cuota.quota_name = nombre_cuota
             db.session.commit()
-            flash('Cuota actualizada con éxito')
+            app.logger.info('Cuota actualizada con éxito')
 
             if request.is_json:
                 return jsonify({"message": "Cuota actualizada con éxito"}), 200
@@ -397,7 +397,7 @@ def editar_cuota(cuota_id):
         except SQLAlchemyError as e:
             db.session.rollback()
             error_msg = "Error al actualizar la cuota: " + str(e)
-            flash(error_msg, 'error')
+            app.logger.warning(error_msg)
             if request.is_json:
                 return jsonify({"error": error_msg}), 500
             return redirect(url_for('dinero'))
@@ -442,7 +442,7 @@ def usuarios():
             db.session.add(nuevo_usuario)
             db.session.commit()
 
-            flash('Usuario creado con éxito')
+            app.logger.info('Usuario creado con éxito')
 
             if request.is_json:
                 return jsonify({"message": "Usuario creado con éxito"}), 201
@@ -454,7 +454,7 @@ def usuarios():
         except SQLAlchemyError as e:
             db.session.rollback()
             error_msg = f"Error al crear el usuario: {str(e)}"
-            flash(error_msg, 'error')
+            app.logger.warning(error_msg)
             if request.is_json:
                 return jsonify({"error": error_msg}), 500
 
@@ -478,7 +478,7 @@ def eliminar_usuario_route(username):
         usuario = User.query.filter_by(username=username).first()
 
         if not usuario:
-            flash('Usuario no encontrado', 'error')
+            app.logger.warning('Usuario no encontrado')
             if request.is_json:
                 return jsonify({"error": "Usuario no encontrado"}), 404
             return redirect(url_for('usuarios.usuarios'))
@@ -487,7 +487,7 @@ def eliminar_usuario_route(username):
         db.session.delete(usuario)
         db.session.commit()
 
-        flash('Usuario eliminado con éxito')
+        app.logger.info('Usuario eliminado con éxito')
 
         if request.is_json:
             return jsonify({"message": "Usuario eliminado con éxito"}), 200
@@ -497,7 +497,7 @@ def eliminar_usuario_route(username):
     except SQLAlchemyError as e:
         db.session.rollback()
         error_msg = f"Error al eliminar el usuario: {str(e)}"
-        flash(error_msg, 'error')
+        app.logger.warning(error_msg)
         if request.is_json:
             return jsonify({"error": error_msg}), 500
         return redirect(url_for('usuarios.usuarios'))
@@ -509,7 +509,7 @@ def editar_usuario(user_id):
     usuario = User.query.get(user_id)
 
     if not usuario:
-        flash('Usuario no encontrado', 'error')
+        app.logger.warning('Usuario no encontrado')
         if request.is_json:
             return jsonify({"error": "Usuario no encontrado"}), 404
         return redirect(url_for('usuarios.usuarios'))
@@ -535,7 +535,7 @@ def editar_usuario(user_id):
                 usuario.password = generate_password_hash(password)
             db.session.commit()
 
-            flash('Usuario actualizado con éxito')
+            app.logger.info('Usuario actualizado con éxito')
 
             if request.is_json:
                 return jsonify({"message": "Usuario actualizado con éxito"}), 200
@@ -547,7 +547,7 @@ def editar_usuario(user_id):
         except SQLAlchemyError as e:
             db.session.rollback()
             error_msg = f"Error al actualizar el usuario: {str(e)}"
-            flash(error_msg, 'error')
+            app.logger.warning(error_msg)
             if request.is_json:
                 return jsonify({"error": error_msg}), 500
 
@@ -589,7 +589,7 @@ def votaciones():
 
             db.session.commit()
 
-            flash('Votación creada con éxito')
+            app.logger.info('Votación creada con éxito')
             return redirect(url_for('votaciones'))
 
         except ValueError as e:
@@ -597,7 +597,7 @@ def votaciones():
         except SQLAlchemyError as e:
             db.session.rollback()
             error_msg = f"Error al crear la votación: {str(e)}"
-            flash(error_msg, 'error')
+            app.logger.warning(error_msg)
 
     # Obtener todas las votaciones
     votaciones = Voting.query.all()
@@ -622,13 +622,13 @@ def eliminar_votacion(votacion_id):
     try:
         votacion = Voting.query.get(votacion_id)
         if not votacion:
-            flash("Votación no encontrada.", "error")
+            app.logger.warning("Votación no encontrada.")
             return redirect(url_for('votaciones'))
 
         db.session.delete(votacion)
         db.session.commit()
 
-        flash('Votación eliminada con éxito')
+        app.logger.info('Votación eliminada con éxito')
         if request.headers.get("Accept") == "application/json":
             return jsonify({"status": "success", "message": "Votación eliminada con éxito"}), 200
         return redirect(url_for('votaciones'))
@@ -636,7 +636,7 @@ def eliminar_votacion(votacion_id):
     except SQLAlchemyError as e:
         db.session.rollback()
         error_msg = f"Error al eliminar la votación: {str(e)}"
-        flash(error_msg, 'error')
+        app.logger.warning(error_msg)
         if request.headers.get("Accept") == "application/json":
             return jsonify({"status": "error", "message": error_msg}), 500
         return redirect(url_for('votaciones'))
@@ -648,7 +648,7 @@ def editar_votacion(votacion_id):
     votacion = Voting.query.get(votacion_id)
 
     if not votacion:
-        flash('Votación no encontrada.')
+        app.logger.info('Votación no encontrada.')
         return redirect(url_for('votaciones'))
 
     if request.method == 'POST':
@@ -671,7 +671,7 @@ def editar_votacion(votacion_id):
 
             db.session.commit()
 
-            flash('Votación actualizada con éxito')
+            app.logger.info('Votación actualizada con éxito')
             return redirect(url_for('votaciones'))
 
         except ValueError as e:
@@ -679,7 +679,7 @@ def editar_votacion(votacion_id):
         except SQLAlchemyError as e:
             db.session.rollback()
             error_msg = f"Error al actualizar la votación: {str(e)}"
-            flash(error_msg, 'error')
+            app.logger.warning(error_msg)
 
     return render_template('editar_votacion.html', votacion=votacion)
 
@@ -689,14 +689,14 @@ def editar_votacion(votacion_id):
 def votar_opcion(opcion_id):
     user_id = session.get('user_id')
     if not user_id:
-        flash("Usuario no autenticado.", "error")
+        app.logger.warning("Usuario no autenticado.")
         return redirect(url_for('votaciones'))
 
     try:
         # Verificar si ya votó por esta opción
         voto_existente = Vote.query.filter_by(user_id=user_id, option_id=opcion_id).first()
         if voto_existente:
-            flash("Ya has votado por esta opción.", "error")
+            app.logger.warning("Ya has votado por esta opción.")
             return redirect(url_for('votaciones'))
 
         # Registrar el voto
@@ -704,14 +704,14 @@ def votar_opcion(opcion_id):
         db.session.add(nuevo_voto)
         db.session.commit()
 
-        flash("Voto registrado con éxito.")
+        app.logger.info("Voto registrado con éxito.")
         if request.headers.get("Accept") == "application/json":
             return jsonify({"status": "success", "message": "Voto registrado con éxito"}), 200
 
     except SQLAlchemyError as e:
         db.session.rollback()
         error_msg = f"Error al registrar el voto: {str(e)}"
-        flash(error_msg, 'error')
+        app.logger.warning(error_msg)
         if request.headers.get("Accept") == "application/json":
             return jsonify({"status": "error", "message": error_msg}), 500
 

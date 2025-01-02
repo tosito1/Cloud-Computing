@@ -1,10 +1,13 @@
 FROM python:3.9-slim
 
-# Instalamos dependencias necesarias para pruebas
+# Instalamos las dependencias necesarias
 RUN pip install requests pytest
 
+# Creamos un directorio para las pruebas
+WORKDIR /tests
+
 # Copiamos el script de pruebas al contenedor
-COPY test_script.py /tests/test_script.py
+COPY test_containers.py /tests/test_containers.py
 
 # Configuramos el punto de entrada para ejecutar las pruebas
-CMD ["pytest", "/tests/test_script.py"]
+CMD ["pytest", "/tests/test_containers.py"]
