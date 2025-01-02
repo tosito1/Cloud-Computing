@@ -2,7 +2,7 @@ name: Deploy Docker Images from Docker Hub
 
 on:
   push:
-    branches: ['release']
+    branches: ['main']
 
 env:
   DOCKER_HUB_USERNAME: antonioj13  # Tu usuario de Docker Hub
