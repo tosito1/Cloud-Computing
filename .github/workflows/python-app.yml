@@ -14,6 +14,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
+      packages: write
       contents: read
 
     steps:
@@ -34,8 +35,43 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      # 6. Deploy using Docker Compose
-      - name: Deploy with Docker Compose
-        run: |
-          cd src
-          docker compose up --build
+      # Paso 4: Extraer metadatos para las imágenes
+      - name: Extract metadata for Docker images
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${DOCKER_HUB_USERNAME}/src-app
+            ${DOCKER_HUB_USERNAME}/src-logs
+            ${DOCKER_HUB_USERNAME}/src-db
+            ghcr.io/${{ github.repository }}/src-app
+            ghcr.io/${{ github.repository }}/src-logs
+            ghcr.io/${{ github.repository }}/src-db
+          tags: |
+            latest
+            v1.${{ github.run_number }}
+
+      # Paso 5: Construir y publicar imágenes para los servicios
+      - name: Build and push src-app
+        uses: docker/build-push-action@v5
+        with:
+          context: ./src/app
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push src-logs
+        uses: docker/build-push-action@v5
+        with:
+          context: ./src/logs
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push src-db
+        uses: docker/build-push-action@v5
+        with:
+          context: ./src/db
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
