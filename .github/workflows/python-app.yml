@@ -34,20 +34,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      # 3. Pull the app image from Docker Hub
-      - name: Pull app Docker image
-        run: docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME_APP }}:latest
-
-      # 4. Pull the logs image from Docker Hub
-      - name: Pull logs Docker image
-        run: docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME_LOGS }}:latest
-
-      # 5. Pull the db image from Docker Hub
-      - name: Pull db Docker image
-        run: docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME_DB }}:latest
-
       # 6. Deploy using Docker Compose
       - name: Deploy with Docker Compose
         run: |
-          docker-compose pull  # Descarga las imágenes necesarias
-          docker-compose up -d  # Inicia los contenedores en modo desacoplado
+          cd src
+          docker compose up --build
