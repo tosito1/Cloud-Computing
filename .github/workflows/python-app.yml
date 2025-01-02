@@ -44,9 +44,6 @@ jobs:
             antonioj13/src-app
             antonioj13/src-logs
             antonioj13/src-db
-            ghcr.io/${{ github.repository }}/src-app
-            ghcr.io/${{ github.repository }}/src-logs
-            ghcr.io/${{ github.repository }}/src-db
           tags: |
             latest
             v1.${{ github.run_number }}
