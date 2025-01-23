@@ -3,10 +3,6 @@ import requests
 import time
 import requests
 
-def test_app_is_running():
-    response = requests.get("http://app:5000")
-    assert response.status_code == 200
-
 def check_service(host, port, retries=5, delay=5):
     """Verifica si un servicio está disponible en el host y puerto especificados."""
     for _ in range(retries):
@@ -18,6 +14,9 @@ def check_service(host, port, retries=5, delay=5):
             time.sleep(delay)  # Espera antes de reintentar
     return False
 
+def test_app_is_running():
+    response = requests.get("http://app:5000")
+    assert response.status_code == 200
 
 def test_app():
     """Comprueba que el servicio de la aplicación responde correctamente."""
