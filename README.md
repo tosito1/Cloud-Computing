@@ -52,7 +52,13 @@ El proyecto se desarrolla siguiendo una serie de hitos que dividen el trabajo en
    - Configuración de los Contenedores
    - Publicación y Actualización Automática
    - Archivo docker-compose.yaml
-5. **Hito 5: Despliegue de la aplicación en un PaaS**
+5. **[Hito 5](docs/Hitos/Hito5.md): Despliegue de la aplicación en un PaaS**
+   - Selección del PaaS y justificación
+   - Configuración de la infraestructura
+   - Despliegue automático desde GitHub
+   - Funcionamiento del despliegue
+   - Pruebas de prestaciones
+   - Uso de herramientas complementarias
 
 ---
 
