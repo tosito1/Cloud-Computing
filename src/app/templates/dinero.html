@@ -256,15 +256,29 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% set total_amount = 0 %}
                             {% for cuota in cuotas %}
                                 <tr>
                                     <td>{{ cuota.name }}</td>
-                                    <td>{{ cuota.user_id }}</td> <!-- Considera mostrar el nombre del usuario -->
+                                    <td>
+                                        {% for usuario in usuarios %}
+                                            {% if usuario.id == cuota.user_id %}
+                                                {{ usuario.username }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
                                     <td>{{ cuota.amount }}</td>
                                     <td>{{ cuota.date }}</td>
                                 </tr>
+                                {% set total_amount = total_amount + cuota.amount %}
                             {% endfor %}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" class="text-right"><strong>Total:</strong></td>
+                                <td colspan="2"><strong>{{ total_amount }}</strong></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -284,14 +298,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for multa in multas %}
+                            {% set total_multa = 0 %}
+                                {% for multa in multas %}
                                 <tr>
-                                    <td>{{ multa.user_id }}</td> <!-- Considera mostrar el nombre del usuario -->
+                                    <td>
+                                        {% for usuario in usuarios %}
+                                            {% if usuario.id == cuota.user_id %}
+                                                {{ usuario.username }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
                                     <td>{{ multa.amount }}</td>
                                     <td>{{ multa.date }}</td>
                                 </tr>
+                                {% set total_multa = total_multa + multa.amount %}
                             {% endfor %}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-right"><strong>Total Multas:</strong></td>
+                                <td colspan="2"><strong>{{ total_multa }}</strong></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
