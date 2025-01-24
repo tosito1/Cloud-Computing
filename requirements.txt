@@ -1,8 +1,8 @@
 Flask
+psycopg2-binary
 SQLAlchemy
-bcrypt
-pytest
-flake8
-colorama
+fluent-logger
+gunicorn
 requests
-psycopg2
+pytest
+python-dotenv
