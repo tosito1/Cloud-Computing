@@ -740,7 +740,7 @@ class DefaultConfig:
 app.config.from_object(DefaultConfig)  # Carga la configuración
 print(f"Clave secreta utilizada: {app.config['SECRET_KEY']}")
 print(app.config)
-
+ 
 
 if __name__ == "__main__":
     # Configuración verificada
