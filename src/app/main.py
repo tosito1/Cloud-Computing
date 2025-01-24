@@ -321,11 +321,13 @@ def dinero():
     usuarios = User.query.all()
     cuotas = Quota.query.all()
     multas = Fine.query.all()
+    total_multa = sum(multa.amount for multa in multas)
+    total_amount = sum(cuota.amount for cuota in cuotas)
     if request.headers.get("Accept") == "application/json":
         cuotas_serializadas = [{"id": c.id, "user_id": c.user_id, "quota_name": c.quota_name, "amount": c.amount} for c in cuotas]
         return jsonify(cuotas_serializadas), 200
     else:
-        return render_template('dinero.html', cuotas=cuotas, multas=multas, usuarios=usuarios)
+        return render_template('dinero.html', cuotas=cuotas, multas=multas, usuarios=usuarios, total_multa=total_multa, total_amount=total_amount)
 
 @app.route('/dinero/<int:cuota_id>/eliminar', methods=['POST'])
 @login_requerido
