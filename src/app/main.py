@@ -26,7 +26,7 @@ logger.info("Aplicación iniciada correctamente.")
 
 # Configuración de la aplicación Flask
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:password@db:5432/app_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://app_db_ncgb_user:jrhbHnKdMYKCclubX0RPPJUF5b9pON4E@dpg-cu9ln4jqf0us73c1j340-a/app_db_ncgb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicializar SQLAlchemy con la aplicación
