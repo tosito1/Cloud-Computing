@@ -270,7 +270,7 @@
                                     <td>{{ cuota.amount }}</td>
                                     <td>{{ cuota.date }}</td>
                                 </tr>
-                                {% set total_amount = total_amount + cuota.amount %}
+                                {% total_amount = total_amount + cuota.amount %}
                             {% endfor %}
                         </tbody>
                         <tfoot>
@@ -311,7 +311,7 @@
                                     <td>{{ multa.amount }}</td>
                                     <td>{{ multa.date }}</td>
                                 </tr>
-                                {% set total_multa = total_multa + multa.amount %}
+                                {% total_multa = total_multa + multa.amount %}
                             {% endfor %}
                         </tbody>
                         <tfoot>
